@@ -1,322 +1,312 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Nextier Data Engine — Own Your Data. Own Your Market.</title>
-<meta name="description" content="A private, branded real-estate data engine — sourcing to pipeline-ready, self-cleaning every month. Own your data. Become a data company.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='%23E8A13A'/%3E%3C/svg%3E">
+<meta name="description" content="A private, branded real-estate data engine — sourcing to pipeline-ready, self-cleaning every month. Own your data. Become a data company."/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='12' fill='%23c6a15b'/%3E%3C/svg%3E"/>
 <style>
   :root{
-    --ground:#0B0E14; --surface:#12161F; --surface-2:#1A202C; --line:#242C3A;
-    --ink:#EAF0F8; --ink-dim:#93A0B4; --ink-faint:#5D687A;
-    --gold:#E8A13A; --gold-soft:rgba(232,161,58,.13); --gold-line:rgba(232,161,58,.38);
-    --teal:#35C6B4; --green:#46C871; --red:#E5695F; --violet:#9E86F0;
-    --radius:14px; --maxw:1080px;
-    --mono:"Cascadia Code","SF Mono",ui-monospace,Consolas,"Liberation Mono",monospace;
-    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
-    --fs-eyebrow:.72rem; --fs-hero:clamp(2.5rem,6.2vw,4.7rem);
-    --fs-h2:clamp(1.5rem,3vw,2.1rem); --fs-lede:clamp(1.05rem,1.8vw,1.32rem);
-  }
-  @media (prefers-color-scheme:light){
-    :root{
-      --ground:#F4F3EE; --surface:#FBFAF6; --surface-2:#FFFFFF; --line:#E4E0D6;
-      --ink:#161A21; --ink-dim:#586173; --ink-faint:#8A93A2;
-      --gold:#B0741A; --gold-soft:rgba(176,116,26,.11); --gold-line:rgba(176,116,26,.34);
-      --teal:#0E7C6F; --green:#1C9A50; --red:#BC3B32; --violet:#6A54C4;
-    }
+    --bg:#000000;--panel:#0b0b0d;--panel2:#070708;--line:#1a1a1e;--line2:#28282f;
+    --ink:#f2f3f5;--muted:#9a9aa6;--faint:#61616b;
+    --gold:#c6a15b;--gold-dim:#8a7440;
+    /* muted institutional categorical palette */
+    --clean:#5a8a6b;--absentee:#5578a8;--estate:#8071a1;--prefc:#b0564c;--lis:#b3924f;--auction:#a06b41;
+    --pos:#5a8a6b;
   }
   *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{margin:0;
-    background:var(--ground); color:var(--ink);
-    font-family:var(--sans); line-height:1.6; letter-spacing:-.003em;
-    -webkit-font-smoothing:antialiased;
-    background-image:
-      radial-gradient(1100px 600px at 78% -8%, var(--gold-soft), transparent 60%),
-      radial-gradient(900px 520px at 5% 4%, rgba(53,198,180,.07), transparent 55%);
-    min-height:100vh;
-  }
-  @media (prefers-color-scheme:reduce){}
-  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px}
-  section{padding:66px 0; border-top:1px solid var(--line)}
-  section:first-of-type{border-top:none}
-  .eyebrow{font-family:var(--mono); font-size:var(--fs-eyebrow); letter-spacing:.26em;
-    text-transform:uppercase; color:var(--gold); margin:0 0 20px; font-weight:600}
-  h1{font-family:var(--sans); font-weight:800; font-size:var(--fs-hero);
-    line-height:1.02; letter-spacing:-.03em; margin:0; text-wrap:balance}
-  h1 .dim{color:var(--ink-dim); font-weight:800}
-  h2{font-family:var(--sans); font-weight:750; font-size:var(--fs-h2);
-    letter-spacing:-.025em; line-height:1.1; margin:0 0 8px; text-wrap:balance}
-  .kicker{font-family:var(--mono); font-size:.7rem; letter-spacing:.22em; text-transform:uppercase;
-    color:var(--ink-faint); margin:0 0 22px; font-weight:600}
-  p{margin:0 0 16px; max-width:66ch; color:var(--ink-dim)}
-  p.lede{font-size:var(--fs-lede); color:var(--ink); max-width:60ch; line-height:1.5}
-  strong{color:var(--ink); font-weight:650}
-  a{color:var(--gold); text-decoration:none}
-  code{font-family:var(--mono);color:var(--teal);font-size:.9em}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       -webkit-font-smoothing:antialiased}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 22px 90px}
+  a{color:var(--gold);text-decoration:none}
+  .serif{font-family:Georgia,"Times New Roman",Times,serif}
+  .tnum{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+  .muted{color:var(--muted)}
+  .kicker{font-size:10.5px;font-weight:700;letter-spacing:2.6px;text-transform:uppercase;color:var(--gold)}
+  h2{font-family:Georgia,"Times New Roman",serif;font-weight:600;font-size:23px;letter-spacing:.2px;margin:0;color:var(--ink)}
+  p{color:var(--muted)}
 
-  .hero{padding-top:74px; padding-bottom:56px}
-  .hero .lede{margin-top:26px}
-  .live{display:inline-flex; align-items:center; gap:9px; font-family:var(--mono);
-    font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; color:var(--teal);
-    border:1px solid var(--line); border-radius:100px; padding:7px 14px; margin-bottom:30px; background:var(--surface)}
-  .dot{width:8px;height:8px;border-radius:50%;background:var(--teal);position:relative}
-  .dot::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1px solid var(--teal);animation:pulse 2.4s ease-out infinite}
-  @keyframes pulse{0%{transform:scale(.6);opacity:.9}100%{transform:scale(1.9);opacity:0}}
-  .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:34px}
-  .chip{font-family:var(--mono); font-size:.74rem; letter-spacing:.02em; color:var(--ink);
-    border:1px solid var(--line); background:var(--surface); border-radius:100px; padding:8px 14px; display:inline-flex; gap:8px; align-items:center}
-  .chip b{color:var(--gold); font-weight:700}
+  .sec{margin-top:56px}
+  .sechead{border-bottom:1px solid var(--line2);padding-bottom:12px;margin-bottom:24px}
+  .sechead .kicker{display:block;margin-bottom:7px}
+  .sechead .note{color:var(--muted);font-size:13px;margin-top:8px;max-width:700px;line-height:1.6}
 
-  .grid{display:grid; gap:16px}
-  .g2{grid-template-columns:repeat(2,1fr)}
-  .g3{grid-template-columns:repeat(3,1fr)}
-  .g4{grid-template-columns:repeat(4,1fr)}
-  @media(max-width:860px){.g3,.g4{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:560px){.g2,.g3,.g4{grid-template-columns:1fr}}
-  .card{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:22px}
-  .card h3{font-size:1.02rem;font-weight:700;margin:0 0 7px;letter-spacing:-.01em;color:var(--ink)}
-  .card p{font-size:.92rem;margin:0;color:var(--ink-dim)}
-  .card .num{font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;color:var(--ink-faint);text-transform:uppercase;display:block;margin-bottom:12px}
-  .feat .card h3{color:var(--gold)}
+  /* masthead */
+  .mast{border-bottom:1px solid var(--line2);padding:34px 0 24px;margin-top:8px;
+        display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+  .mast .brand{font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--muted)}
+  .mast h1{font-family:Georgia,serif;font-weight:600;font-size:38px;letter-spacing:.3px;margin:12px 0 0;line-height:1.08;max-width:15ch}
+  .mast h1 em{color:var(--gold);font-style:italic}
+  .mast .rule{width:54px;height:2px;background:var(--gold);margin:18px 0 0}
+  .mast .meta{text-align:right;font-size:12px;color:var(--muted);line-height:1.9}
+  .mast .meta b{color:var(--ink);font-weight:600}
+  .live{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;letter-spacing:1.5px;
+        text-transform:uppercase;color:var(--pos)}
+  .live .d{width:6px;height:6px;border-radius:50%;background:var(--pos)}
+  @media(max-width:620px){.mast .meta{text-align:left}.mast h1{font-size:31px}}
 
-  .quote{font-family:var(--serif); font-style:italic; font-size:clamp(1.5rem,3.4vw,2.35rem);
-    line-height:1.24; color:var(--ink); letter-spacing:-.01em; max-width:20ch; margin:0; text-wrap:balance}
-  .quote .amp{color:var(--gold)}
+  /* exec summary */
+  .exec{margin-top:28px;background:var(--panel);border:1px solid var(--line);border-left:2px solid var(--gold);
+        border-radius:3px;padding:24px 28px}
+  .exec p{margin:0;font-family:Georgia,serif;font-size:18px;line-height:1.6;color:#dbe3ee}
+  .exec p b{color:#fff;font-weight:600}
+  .exec .subline{font-family:Georgia,serif;font-style:italic;font-size:13.5px;color:var(--muted);margin-top:14px}
 
-  .layers{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--surface)}
-  .layer{display:grid;grid-template-columns:42px 1fr;gap:16px;align-items:center;padding:13px 18px;border-top:1px solid var(--line)}
-  .layer:first-child{border-top:none}
-  .layer .idx{font-family:var(--mono);font-size:.78rem;color:var(--ink-faint);font-weight:600}
-  .layer .lname{font-weight:650;color:var(--ink);font-size:.96rem}
-  .layer .ldesc{color:var(--ink-dim);font-size:.85rem;display:block;margin-top:1px;font-family:var(--mono);letter-spacing:0}
-  .loop-note{font-family:var(--mono);font-size:.76rem;color:var(--teal);margin-top:16px;letter-spacing:.02em}
+  /* pull statement */
+  .pull{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,9fr);gap:34px;align-items:center}
+  @media(max-width:640px){.pull{grid-template-columns:1fr;gap:18px}}
+  .pull .big{font-family:Georgia,serif;font-size:29px;line-height:1.22;color:var(--ink);margin:0}
+  .pull .big em{color:var(--gold);font-style:italic}
+  .pull p{margin:0 0 12px;font-size:14px;line-height:1.65}
+  .pull p:last-child{margin-bottom:0}
+  .pull b{color:var(--ink);font-weight:600}
 
-  .stack{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
-  @media(max-width:720px){.stack{grid-template-columns:repeat(2,1fr)}}
-  .stack > div{background:var(--surface);padding:20px}
-  .stack .role{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:10px}
-  .stack h3{margin:0 0 6px;font-size:1.05rem;color:var(--gold)}
-  .stack p{font-size:.86rem;margin:0}
+  /* metrics / cards */
+  .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);border-radius:3px;overflow:hidden}
+  @media(max-width:640px){.metrics{grid-template-columns:1fr}}
+  .metric{padding:22px 24px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .metric .k{font-size:10.5px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--gold)}
+  .metric .t{font-family:Georgia,serif;font-size:17px;margin:9px 0 6px;color:var(--ink)}
+  .metric .d{font-size:12.5px;color:var(--muted);line-height:1.55}
+  .metrics.m3 .metric:nth-child(3n){border-right:none}
+  .metrics.m3 .metric:nth-last-child(-n+3){border-bottom:none}
+  .metrics.m2cols{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:640px){.metrics.m2cols{grid-template-columns:1fr}}
+  .metrics.m2cols .metric:nth-child(2n){border-right:none}
 
-  .wiz{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
-  .wiz .q{background:var(--surface);padding:16px 20px;display:grid;grid-template-columns:38px 1fr;gap:14px;align-items:start}
-  .wiz .qn{font-family:var(--mono);font-size:.8rem;color:var(--gold);font-weight:700;padding-top:1px}
-  .wiz .qt{font-weight:650;color:var(--ink);font-size:.98rem}
-  .wiz .qt em{color:var(--gold);font-style:normal}
-  .wiz .qa{font-family:var(--mono);font-size:.8rem;color:var(--teal);margin-top:5px;letter-spacing:0;display:block;line-height:1.5}
-  .wiz-out{margin-top:16px;border:1px solid var(--gold-line);background:var(--gold-soft);border-radius:12px;padding:16px 20px;font-family:var(--mono);font-size:.84rem;color:var(--ink);line-height:1.6}
-  .wiz-out b{color:var(--gold)}
+  /* six-up ships-with */
+  .ship{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);border-radius:3px;overflow:hidden}
+  @media(max-width:760px){.ship{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:480px){.ship{grid-template-columns:1fr}}
+  .ship .cell{padding:20px 22px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .ship .cell .k{font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--faint)}
+  .ship .cell .t{font-family:Georgia,serif;font-size:16px;margin:8px 0 6px;color:var(--gold)}
+  .ship .cell .d{font-size:12.5px;color:var(--muted);line-height:1.55}
 
-  .price-wrap{overflow-x:auto}
-  table.price{width:100%;border-collapse:collapse;font-size:.92rem;min-width:520px}
-  table.price th,table.price td{text-align:left;padding:14px 16px;border-bottom:1px solid var(--line)}
-  table.price thead th{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);font-weight:600}
-  table.price td.tier{font-weight:650;color:var(--ink)}
-  table.price td.detail{color:var(--ink-dim)}
-  table.price td.amt{font-family:var(--mono);text-align:right;color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
-  table.price tr.hot td{background:var(--gold-soft)}
+  /* wizard rows */
+  .qrow{display:grid;grid-template-columns:52px 1fr;gap:18px;align-items:baseline;padding:16px 0;border-bottom:1px solid var(--line)}
+  .qrow:last-child{border-bottom:none}
+  .qrow .qn{font-family:Georgia,serif;font-style:italic;font-size:15px;color:var(--faint)}
+  .qrow .qt{font-size:15.5px;font-weight:600;color:var(--ink)}
+  .qrow .qt em{color:var(--gold);font-style:normal}
+  .qrow .qa{font-size:12.5px;color:var(--muted);margin-top:3px}
+  .wout{margin-top:18px;border:1px solid var(--line2);border-left:2px solid var(--gold);border-radius:3px;padding:16px 20px;font-size:13px;color:var(--ink);line-height:1.6}
+  .wout b{color:var(--gold);font-weight:600}
+
+  /* portal 4-up */
+  .portal{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line);border-radius:3px;overflow:hidden}
+  @media(max-width:720px){.portal{grid-template-columns:repeat(2,1fr)}}
+  .portal .cell{padding:20px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .portal .role{font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:var(--faint);margin-bottom:9px}
+  .portal .t{font-family:Georgia,serif;font-size:18px;color:var(--gold);margin:0 0 6px}
+  .portal .d{font-size:12px;color:var(--muted);line-height:1.55}
+
+  /* pricing tables */
+  .pwrap{overflow-x:auto;border:1px solid var(--line);border-radius:3px}
+  table.price{border-collapse:collapse;width:100%;min-width:560px;font-size:13.5px}
+  table.price thead th{background:var(--panel2);color:var(--muted);font-size:10px;text-transform:uppercase;
+    letter-spacing:1.2px;padding:12px 16px;font-weight:700;text-align:left;border-bottom:1px solid var(--line2)}
+  table.price td{padding:14px 16px;border-bottom:1px solid var(--line)}
+  table.price tr:last-child td{border-bottom:none}
+  table.price td.tier{font-weight:600;color:var(--ink);white-space:nowrap}
+  table.price td.detail{color:var(--muted)}
+  table.price td.amt{text-align:right;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  table.price tr.hot td{background:rgba(198,161,91,.08)}
   table.price tr.hot td.tier,table.price tr.hot td.amt{color:var(--gold)}
-  .band{font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);margin:26px 0 10px;padding-left:2px}
+  .bandlbl{font-size:10.5px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--gold);margin:0 0 10px}
+  .bandlbl:not(:first-of-type){margin-top:28px}
 
-  .icp .trigger{font-family:var(--mono);font-size:.78rem;color:var(--teal);margin:8px 0 0;letter-spacing:0}
+  /* icp cards */
+  .icp{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  @media(max-width:640px){.icp{grid-template-columns:1fr}}
+  .ic{border:1px solid var(--line);border-left:3px solid var(--line2);border-radius:3px;padding:18px 20px;background:var(--panel2)}
+  .ic.investor{border-left-color:var(--prefc)}
+  .ic.agent{border-left-color:var(--lis)}
+  .ic.lo{border-left-color:var(--absentee)}
+  .ic.op{border-left-color:var(--estate)}
+  .ic .k{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted)}
+  .ic .t{font-family:Georgia,serif;font-size:17px;margin:7px 0 8px;color:var(--ink)}
+  .ic .seg{font-size:12px;color:var(--muted);line-height:1.55}
 
-  .cta{text-align:center;padding:80px 0}
-  .cta h2{font-size:clamp(1.8rem,4vw,2.8rem)}
-  .cta .btn{display:inline-block;margin-top:24px;font-family:var(--mono);font-size:.82rem;letter-spacing:.06em;
-    background:var(--gold);color:#0B0E14;border-radius:100px;padding:14px 28px;font-weight:700}
-  .cta .btn:hover{filter:brightness(1.06)}
-  .cta .sub{font-family:var(--mono);font-size:.74rem;color:var(--ink-faint);margin-top:16px;letter-spacing:.04em}
+  /* cta */
+  .cta{margin-top:60px;border:1px solid var(--line2);border-radius:3px;background:var(--panel);padding:44px 32px;text-align:center}
+  .cta h2{font-size:29px}
+  .cta p{margin:14px auto 0;max-width:56ch;font-size:14px}
+  .btn{display:inline-block;margin-top:22px;font-size:12px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
+    background:var(--gold);color:#0a0a0a;border-radius:3px;padding:14px 30px}
+  .btn:hover{background:#d4b475}
+  .cta .sub{font-size:11.5px;color:var(--faint);margin-top:16px;letter-spacing:.4px;text-transform:none}
 
-  footer{border-top:1px solid var(--line);padding:40px 0 60px}
-  footer .lines{font-family:var(--serif);font-style:italic;color:var(--ink-dim);font-size:1.05rem;line-height:1.9;margin-bottom:22px}
-  footer .meta{font-family:var(--mono);font-size:.74rem;color:var(--ink-faint);letter-spacing:.04em}
-
-  .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
-  .reveal.in{opacity:1;transform:none}
-  @media(prefers-reduced-motion:reduce){
-    .reveal{opacity:1;transform:none;transition:none}
-    .dot::after{animation:none}
-    html{scroll-behavior:auto}
-  }
-  :focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:4px}
-</style>
-</head>
+  .foot{margin-top:48px;padding-top:22px;border-top:1px solid var(--line2);color:var(--faint);font-size:12px;line-height:1.9}
+  .foot .fq{font-family:Georgia,serif;font-style:italic;color:var(--muted);font-size:13.5px;line-height:1.9;margin:0 0 14px}
+  .foot b{color:var(--muted);font-weight:600}
+  :focus-visible{outline:1px solid var(--gold);outline-offset:2px}
+</style></head>
 <body>
-  <div class="wrap">
+<div class="wrap">
 
-    <section class="hero">
-      <span class="live"><span class="dot"></span>Live signal engine · detection is free</span>
-      <p class="eyebrow">Nextier Technologies — The Data Engine</p>
-      <h1>Data is the new oil.<br><span class="dim">Own the well.</span></h1>
-      <p class="lede">A private, branded data engine for real-estate operators — sourcing straight through to pipeline-ready, self-cleaning every month. Stop renting scattered tools. <strong>Own your data and become a data company.</strong></p>
-      <div class="chips">
-        <span class="chip"><b>$0</b> detection · all 50 states</span>
-        <span class="chip">Self-cleaning every month</span>
-        <span class="chip">Your brand · your data · isolated</span>
-        <span class="chip">Own it — never rent it</span>
-      </div>
-    </section>
+  <!-- MASTHEAD -->
+  <header class="mast">
+    <div>
+      <div class="brand">Nextier · Operating Intelligence</div>
+      <h1 class="serif">The Data <em>Engine</em></h1>
+      <div class="rule"></div>
+    </div>
+    <div class="meta">
+      <div><span class="live"><span class="d"></span>Live signal engine</span></div>
+      <div><b>Detection $0</b> · all 50 states</div>
+      <div><b>Self-cleaning</b> · every month</div>
+      <div><b>White-label</b> · your brand, your data</div>
+    </div>
+  </header>
 
-    <section class="reveal">
-      <p class="kicker">The category shift</p>
-      <div class="grid g2" style="align-items:center;gap:40px">
-        <p class="quote">Stop buying lists.<br>Start working <span class="amp">signals.</span></p>
-        <div>
-          <p class="lede">Lists rot on arrival. Signals compound. Most of what a data vendor sells you has already sold or already listed — wasted spend, low hit rate.</p>
-          <p>The Data Engine holds a whole territory, watches it every day, and surfaces the properties that just changed state — pre-foreclosure, auction, estate, vacancy, loan reset. <strong>Fresh reasons to act, not a stale file.</strong></p>
-        </div>
-      </div>
-    </section>
-
-    <section class="reveal">
-      <p class="kicker">What it is</p>
-      <h2>The data foundation under your outreach.</h2>
-      <p class="lede">It takes scattered property, owner, and contact data and turns it into ranked, tagged, execution-ready action sets — continuously, scoped to you. The boundary is clean: <strong>the engine owns the data; you own the deals.</strong></p>
-      <div class="grid g3" style="margin-top:26px">
-        <div class="card"><span class="num">Detect</span><h3>New signals, daily</h3><p>The moment a property changes state. Free detection layer — you see your market before you commit a dollar.</p></div>
-        <div class="card"><span class="num">Enrich &amp; score</span><h3>Reachable + ranked</h3><p>Skip-traced, line-typed, DNC-checked, phones ranked. Every owner scored by motivation and fit.</p></div>
-        <div class="card"><span class="num">Hand off</span><h3>Prepped to the edge</h3><p>Packaged into ready-to-work blocks — SMS, dialer, or your CRM. Held at your GO. It prepares; you execute.</p></div>
-      </div>
-    </section>
-
-    <section class="reveal feat">
-      <p class="kicker">Every engine ships with</p>
-      <h2>The standard build — day one.</h2>
-      <div class="grid g3" style="margin-top:24px">
-        <div class="card"><span class="num">The brain</span><h3>Knowledge Graph</h3><p>Your world mapped — entities, segments, territories, playbook, and how it all connects. What the engine reasons over.</p></div>
-        <div class="card"><span class="num">The board</span><h3>Kanban Pipeline</h3><p>Every deal on a board, stage by stage. Drag it forward — the board state <em>is</em> the truth, not a spreadsheet guess.</p></div>
-        <div class="card"><span class="num">On schedule</span><h3>Automations &amp; Calendar</h3><p>Scheduled runs, follow-up cadences, reminders. Set it once — it fires on time, every time.</p></div>
-        <div class="card"><span class="num">Live stream</span><h3>Event Signal Feed</h3><p>The moment-by-moment stream of what just changed — new distress, auction, estate, expired — as it lands.</p></div>
-        <div class="card"><span class="num">The receipts</span><h3>Updates &amp; Logs</h3><p>Every touch, reply, and outcome — recorded on the books. Full history, always.</p></div>
-        <div class="card"><span class="num">No drift</span><h3>Repeatable Core Workflows</h3><p>Intake → enrich → score → tag → ready. The same way every time. No one-off spreadsheets, no drift.</p></div>
-      </div>
-    </section>
-
-    <section class="reveal">
-      <p class="kicker">The consultation — the first thing you touch</p>
-      <h2>We interview you. Then the engine is yours.</h2>
-      <p class="lede">A guided consultation that asks the right questions to build two things: your <strong>Knowledge Graph</strong> and your <strong>Buy Box + target territories.</strong> Answer the wizard → the engine configures itself to your world.</p>
-      <div class="wiz" style="margin-top:22px">
-        <div class="q"><span class="qn">Q1</span><div><span class="qt">Who are you, and what's your deal?</span><span class="qa">→ investor · agent · loan officer · operator · developer</span></div></div>
-        <div class="q"><span class="qn">Q2</span><div><span class="qt">What's a deal <em>for you</em>?</span><span class="qa">→ buy box: property type · price band · equity floor · condition · occupancy</span></div></div>
-        <div class="q"><span class="qn">Q3</span><div><span class="qt">Where do you hunt?</span><span class="qa">→ target territories: states → counties → ZIPs, drawn on the map</span></div></div>
-        <div class="q"><span class="qn">Q4</span><div><span class="qt">What makes an owner a "now"?</span><span class="qa">→ pick the triggers: distress · estate · vacant · expired · refi · tax-delinquent</span></div></div>
-        <div class="q"><span class="qn">Q5</span><div><span class="qt">How do you work leads?</span><span class="qa">→ channels + capacity: SMS · dialer · direct mail · straight to your CRM</span></div></div>
-        <div class="q"><span class="qn">Q6</span><div><span class="qt">Whose name is on it?</span><span class="qa">→ brand · domain · logo · operator persona</span></div></div>
-      </div>
-      <div class="wiz-out">→ Output: your <b>Knowledge Graph is built</b>, your <b>buy box + territory scoped</b>, portal branded, and the first <b>universe report</b> pulled — before you spend a dollar.</div>
-    </section>
-
-    <section class="reveal">
-      <p class="kicker">What you log into</p>
-      <h2>The portal — four parts of one office.</h2>
-      <p>Your territory, turned into a working asset — one place, on your own domain, under your brand.</p>
-      <div class="stack" style="margin-top:22px">
-        <div><div class="role">Filing cabinet</div><h3>Postgres</h3><p>Every parcel, signal, phone, equity, tag. The source of truth — your drawer only.</p></div>
-        <div><div class="role">Pre-sorted pile</div><h3>Auto-tags</h3><p>Priority labels stamped by score. The tags <em>are</em> the priority — "what's hot" answered before it's asked.</p></div>
-        <div><div class="role">The analyst</div><h3>Luci</h3><p>Ask in plain English. She rolls to the next mobile, hunts the surviving spouse, flags re-defaulted loan-mods — and keeps the pipeline moving.</p></div>
-        <div><div class="role">The playbook</div><h3>KB</h3><p>Your scripts, offer templates, and articles, per surface. Data <em>plus</em> the playbook to act on it.</p></div>
-      </div>
-    </section>
-
-    <section class="reveal">
-      <p class="kicker">Your engine, walled off</p>
-      <h2>Your data is yours alone.</h2>
-      <p class="lede">Not a seat in someone else's tool — a company asset you own. Your engine runs isolated, and your data is never pooled with anyone else's.</p>
-      <div class="grid g3" style="margin-top:24px">
-        <div class="card"><span class="num">Isolated</span><h3>Your own database</h3><p>A dedicated stack — your records live in your database, walled off from every other operator.</p></div>
-        <div class="card"><span class="num">Branded</span><h3>Your domain &amp; name</h3><p>Your logo, your colors, your URL. Clients and partners see you — a real-estate tech company.</p></div>
-        <div class="card"><span class="num">Owned</span><h3>An asset, not a rental</h3><p>The database compounds every month. You're building equity in data, not renting a list that expires.</p></div>
-      </div>
-    </section>
-
-    <section class="reveal">
-      <p class="kicker">Pricing</p>
-      <h2>One engine. You pick the scale.</h2>
-      <p>Start with one market and prove it. Expand to a region, or command all fifty states under your own brand. Pricing scales to your territory.</p>
-
-      <p class="band">Monthly Pipeline Management</p>
-      <div class="price-wrap">
-        <table class="price">
-          <thead><tr><th>Tier</th><th>Best for</th><th style="text-align:right">Price / mo</th></tr></thead>
-          <tbody>
-            <tr><td class="tier">10K leads</td><td class="detail">Prove it, one market · monthly refresh · portal</td><td class="amt">$1,500</td></tr>
-            <tr><td class="tier">50K leads</td><td class="detail">Scale across markets · weekly · your territory · Luci</td><td class="amt">$5,000</td></tr>
-            <tr class="hot"><td class="tier">100K leads</td><td class="detail">Run it like a machine · daily · custom-built branded portal · Luci</td><td class="amt">$9,000</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <p class="band">National Off-Market Acquisition Engine</p>
-      <div class="price-wrap">
-        <table class="price">
-          <thead><tr><th>Tier</th><th>Coverage</th><th style="text-align:right">Price / mo</th></tr></thead>
-          <tbody>
-            <tr><td class="tier">Regional</td><td class="detail">Up to 5 states · daily detect · monthly re-verify</td><td class="amt">$15,000</td></tr>
-            <tr><td class="tier">National Core</td><td class="detail">Up to 25 states · API + portal</td><td class="amt">$40,000</td></tr>
-            <tr><td class="tier">National Full</td><td class="detail">All 50 states · dedicated delivery</td><td class="amt">$75,000</td></tr>
-            <tr><td class="tier">Enterprise / White-Label</td><td class="detail">All 50 + dedicated · your brand · custom segments</td><td class="amt">$125,000+</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p style="margin-top:14px;font-family:var(--mono);font-size:.78rem;color:var(--ink-faint)">Detection is always included — you see your market's real numbers before you commit a dollar.</p>
-    </section>
-
-    <section class="reveal icp">
-      <p class="kicker">Who it's for — any RE dealmaker</p>
-      <h2>One engine, a portal per world.</h2>
-      <p>RE offices · mortgage offices · fix-n-flips · wholesalers · small REITs · operators · developers. Same machine — different situational segments per buyer.</p>
-      <div class="grid g4" style="margin-top:24px">
-        <div class="card"><span class="num">Investor / Flipper</span><h3>Distress + opportunity</h3><p class="trigger">pre-foreclosure · auction · estate · vacant · absentee · high-equity</p></div>
-        <div class="card"><span class="num">Agent / Broker</span><h3>Listing opportunity</h3><p class="trigger">MLS expired · sell-propensity · estate · equity + tenure</p></div>
-        <div class="card"><span class="num">Mortgage / Loan Officer</span><h3>Refi readiness</h3><p class="trigger">ARM reset · high equity · refi-propensity · low LTV</p></div>
-        <div class="card"><span class="num">Operator / Developer</span><h3>Reno + territory</h3><p class="trigger">roof/HVAC propensity · property age · owner-occupied</p></div>
-      </div>
-    </section>
-
-    <section class="reveal">
-      <p class="kicker">Why it compounds</p>
-      <div class="grid g2" style="gap:40px;align-items:center">
-        <p class="quote">You can't fight what you <span class="amp">can't see.</span></p>
-        <div>
-          <p class="lede">A foundational 3-layer data machine — <strong>Lake → Warehouse → Database, with Luci scanning it alive.</strong> Nothing goes stale, nothing hides.</p>
-          <p>Every month the engine detects new signals, re-verifies the standing pool, drops what sold, and refreshes what's still available. <strong>The floor rises.</strong> Your pipeline is worth more at the end of the month than the start — an asset that grows while you sleep.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="cta reveal">
-      <h2>See your market — live.</h2>
-      <p style="margin:16px auto 0;color:var(--ink-dim)">Twenty minutes. We pull your real territory numbers on the call — not a pitch, your own data. Then you decide.</p>
-      <a class="btn" href="mailto:tb@outreachglobal.io?subject=Data%20Engine%20Walkthrough">Book your territory walkthrough →</a>
-      <p class="sub">Nextier Technologies · tb@outreachglobal.io</p>
-    </section>
-
-    <footer class="wrap">
-      <p class="lines">
-        "Find the deal motivation, and motivate the deal."<br>
-        "Stop buying lists. Start working signals."<br>
-        "Better Data. Better Decisions. Better Results."
-      </p>
-      <p class="meta">© Nextier Technologies — Detection · Prioritization · Proof.</p>
-    </footer>
-
+  <!-- EXEC -->
+  <div class="exec">
+    <p>Data is the new oil — so <b>own the well.</b> A private, branded data engine for real-estate operators: sourcing straight through to pipeline-ready, and self-cleaning every month. Stop renting scattered tools. <b>Own your data, and become a data company.</b></p>
+    <div class="subline">"Find the deal motivation, and motivate the deal." · "Stop buying lists. Start working signals."</div>
   </div>
 
-<script>
-  (function(){
-    var els = document.querySelectorAll('.reveal');
-    if(!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion:reduce)').matches){
-      els.forEach(function(e){e.classList.add('in')}); return;
-    }
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target);} });
-    },{threshold:.12, rootMargin:'0px 0px -8% 0px'});
-    els.forEach(function(e){io.observe(e)});
-  })();
-</script>
-</body>
-</html>
+  <!-- THE SHIFT -->
+  <section class="sec">
+    <div class="sechead"><span class="kicker">The category shift</span><h2 class="serif">Lists rot. Signals compound.</h2>
+      <div class="note">Most of what a data vendor sells has already sold or already listed — wasted spend, low hit rate.</div></div>
+    <div class="pull">
+      <p class="big">Stop buying lists.<br>Start working <em>signals.</em></p>
+      <div>
+        <p>The engine holds a whole territory, watches it every day, and surfaces the properties that just changed state — pre-foreclosure, auction, estate, vacancy, loan reset.</p>
+        <p><b>Fresh reasons to act, not a stale file.</b> Detection is free — you see your market before you commit a dollar.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT IT IS -->
+  <section class="sec">
+    <div class="sechead"><span class="kicker">What it is</span><h2 class="serif">The data foundation under your outreach.</h2>
+      <div class="note">Scattered property, owner, and contact data → ranked, tagged, execution-ready action sets. The engine owns the data; you own the deals.</div></div>
+    <div class="metrics m3">
+      <div class="metric"><div class="k">Detect</div><div class="t serif">New signals, daily</div><div class="d">The moment a property changes state. Free detection layer — see your market before you spend.</div></div>
+      <div class="metric"><div class="k">Enrich &amp; score</div><div class="t serif">Reachable + ranked</div><div class="d">Skip-traced, line-typed, DNC-checked, phones ranked. Every owner scored by motivation and fit.</div></div>
+      <div class="metric"><div class="k">Hand off</div><div class="t serif">Prepped to the edge</div><div class="d">Packaged into ready-to-work blocks — SMS, dialer, or your CRM. Held at your GO.</div></div>
+    </div>
+  </section>
+
+  <!-- SHIPS WITH -->
+  <section class="sec">
+    <div class="sechead"><span class="kicker">Every engine ships with</span><h2 class="serif">The standard build — day one.</h2></div>
+    <div class="ship">
+      <div class="cell"><div class="k">The brain</div><div class="t serif">Knowledge Graph</div><div class="d">Your world mapped — entities, segments, territories, playbook, and how it all connects.</div></div>
+      <div class="cell"><div class="k">The board</div><div class="t serif">Kanban Pipeline</div><div class="d">Every deal on a board, stage by stage. The board state is the truth, not a spreadsheet guess.</div></div>
+      <div class="cell"><div class="k">On schedule</div><div class="t serif">Automations &amp; Calendar</div><div class="d">Scheduled runs, follow-up cadences, reminders. Set once — it fires on time, every time.</div></div>
+      <div class="cell"><div class="k">Live stream</div><div class="t serif">Event Signal Feed</div><div class="d">The moment-by-moment stream of what just changed — distress, auction, estate, expired.</div></div>
+      <div class="cell"><div class="k">The receipts</div><div class="t serif">Updates &amp; Logs</div><div class="d">Every touch, reply, and outcome — recorded on the books. Full history, always.</div></div>
+      <div class="cell"><div class="k">No drift</div><div class="t serif">Repeatable Workflows</div><div class="d">Intake → enrich → score → tag → ready. The same way every time. No one-off spreadsheets.</div></div>
+    </div>
+  </section>
+
+  <!-- CONSULTATION -->
+  <section class="sec">
+    <div class="sechead"><span class="kicker">The consultation — the first thing you touch</span><h2 class="serif">We interview you. Then the engine is yours.</h2>
+      <div class="note">A guided consultation that asks the right questions to build two things: your Knowledge Graph and your Buy Box + target territories.</div></div>
+    <div class="qrow"><div class="qn">Q1</div><div><div class="qt">Who are you, and what's your deal?</div><div class="qa">investor · agent · loan officer · operator · developer</div></div></div>
+    <div class="qrow"><div class="qn">Q2</div><div><div class="qt">What's a deal <em>for you</em>?</div><div class="qa">buy box: property type · price band · equity floor · condition · occupancy</div></div></div>
+    <div class="qrow"><div class="qn">Q3</div><div><div class="qt">Where do you hunt?</div><div class="qa">target territories: states → counties → ZIPs, drawn on the map</div></div></div>
+    <div class="qrow"><div class="qn">Q4</div><div><div class="qt">What makes an owner a "now"?</div><div class="qa">pick the triggers: distress · estate · vacant · expired · refi · tax-delinquent</div></div></div>
+    <div class="qrow"><div class="qn">Q5</div><div><div class="qt">How do you work leads?</div><div class="qa">channels + capacity: SMS · dialer · direct mail · straight to your CRM</div></div></div>
+    <div class="qrow"><div class="qn">Q6</div><div><div class="qt">Whose name is on it?</div><div class="qa">brand · domain · logo · operator persona</div></div></div>
+    <div class="wout">→ Output: your <b>Knowledge Graph is built</b>, your <b>buy box + territory scoped</b>, portal branded, and the first <b>universe report</b> pulled — before you spend a dollar.</div>
+  </section>
+
+  <!-- PORTAL -->
+  <section class="sec">
+    <div class="sechead"><span class="kicker">What you log into</span><h2 class="serif">The portal — four parts of one office.</h2>
+      <div class="note">Your territory, turned into a working asset — one place, on your own domain, under your brand.</div></div>
+    <div class="portal">
+      <div class="cell"><div class="role">Filing cabinet</div><div class="t">Postgres</div><div class="d">Every parcel, signal, phone, equity, tag. The source of truth — your drawer only.</div></div>
+      <div class="cell"><div class="role">Pre-sorted pile</div><div class="t">Auto-tags</div><div class="d">Priority labels stamped by score. "What's hot" answered before it's asked.</div></div>
+      <div class="cell"><div class="role">The analyst</div><div class="t">Luci</div><div class="d">Ask in plain English. Rolls to the next mobile, hunts the surviving spouse, flags re-defaulted loan-mods.</div></div>
+      <div class="cell"><div class="role">The playbook</div><div class="t">KB</div><div class="d">Your scripts, offer templates, and articles, per surface. Data plus the playbook to act.</div></div>
+    </div>
+  </section>
+
+  <!-- ISOLATED -->
+  <section class="sec">
+    <div class="sechead"><span class="kicker">Your engine, walled off</span><h2 class="serif">Your data is yours alone.</h2>
+      <div class="note">Not a seat in someone else's tool — a company asset you own. Your engine runs isolated; your data is never pooled with anyone else's.</div></div>
+    <div class="metrics m3">
+      <div class="metric"><div class="k">Isolated</div><div class="t serif">Your own database</div><div class="d">A dedicated stack — your records live in your database, walled off from every other operator.</div></div>
+      <div class="metric"><div class="k">Branded</div><div class="t serif">Your domain &amp; name</div><div class="d">Your logo, your colors, your URL. Clients and partners see you — a real-estate tech company.</div></div>
+      <div class="metric"><div class="k">Owned</div><div class="t serif">An asset, not a rental</div><div class="d">The database compounds every month. You build equity in data, not rent a list that expires.</div></div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="sec">
+    <div class="sechead"><span class="kicker">Pricing</span><h2 class="serif">One engine. You pick the scale.</h2>
+      <div class="note">Start with one market and prove it. Expand to a region, or command all fifty states under your own brand. Detection is always included.</div></div>
+
+    <div class="bandlbl">Monthly Pipeline Management</div>
+    <div class="pwrap">
+      <table class="price">
+        <thead><tr><th>Tier</th><th>Best for</th><th style="text-align:right">Price / mo</th></tr></thead>
+        <tbody>
+          <tr><td class="tier">10K leads</td><td class="detail">Prove it, one market · monthly refresh · portal</td><td class="amt">$1,500</td></tr>
+          <tr><td class="tier">50K leads</td><td class="detail">Scale across markets · weekly · your territory · Luci</td><td class="amt">$5,000</td></tr>
+          <tr class="hot"><td class="tier">100K leads</td><td class="detail">Run it like a machine · daily · custom branded portal · Luci</td><td class="amt">$9,000</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="bandlbl">National Off-Market Acquisition Engine</div>
+    <div class="pwrap">
+      <table class="price">
+        <thead><tr><th>Tier</th><th>Coverage</th><th style="text-align:right">Price / mo</th></tr></thead>
+        <tbody>
+          <tr><td class="tier">Regional</td><td class="detail">Up to 5 states · daily detect · monthly re-verify</td><td class="amt">$15,000</td></tr>
+          <tr><td class="tier">National Core</td><td class="detail">Up to 25 states · API + portal</td><td class="amt">$40,000</td></tr>
+          <tr><td class="tier">National Full</td><td class="detail">All 50 states · dedicated delivery</td><td class="amt">$75,000</td></tr>
+          <tr><td class="tier">Enterprise / White-Label</td><td class="detail">All 50 + dedicated · your brand · custom segments</td><td class="amt">$125,000+</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ICP -->
+  <section class="sec">
+    <div class="sechead"><span class="kicker">Who it's for — any RE dealmaker</span><h2 class="serif">One engine, a portal per world.</h2>
+      <div class="note">RE offices · mortgage offices · fix-n-flips · wholesalers · small REITs · operators · developers.</div></div>
+    <div class="icp">
+      <div class="ic investor"><div class="k">Investor / Flipper</div><div class="t serif">Distress + opportunity</div><div class="seg">pre-foreclosure · auction · estate · vacant · absentee · high-equity</div></div>
+      <div class="ic agent"><div class="k">Agent / Broker</div><div class="t serif">Listing opportunity</div><div class="seg">MLS expired · sell-propensity · estate · equity + tenure</div></div>
+      <div class="ic lo"><div class="k">Mortgage / Loan Officer</div><div class="t serif">Refi readiness</div><div class="seg">ARM reset · high equity · refi-propensity · low LTV</div></div>
+      <div class="ic op"><div class="k">Operator / Developer</div><div class="t serif">Reno + territory</div><div class="seg">roof/HVAC propensity · property age · owner-occupied</div></div>
+    </div>
+  </section>
+
+  <!-- WHY COMPOUNDS -->
+  <section class="sec">
+    <div class="sechead"><span class="kicker">Why it compounds</span><h2 class="serif">You can't fight what you can't see.</h2></div>
+    <div class="pull">
+      <p class="big">An asset that grows while you <em>sleep.</em></p>
+      <div>
+        <p>A foundational 3-layer machine — <b>Lake → Warehouse → Database, with Luci scanning it alive.</b> Nothing goes stale, nothing hides.</p>
+        <p>Every month the engine detects new signals, re-verifies the standing pool, drops what sold, and refreshes what's still available. <b>The floor rises</b> — your pipeline is worth more at month-end than the start.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta">
+    <h2 class="serif">See your market — live.</h2>
+    <p>Twenty minutes. We pull your real territory numbers on the call — not a pitch, your own data. Then you decide.</p>
+    <a class="btn" href="mailto:tb@outreachglobal.io?subject=Data%20Engine%20Walkthrough">Book your territory walkthrough</a>
+    <div class="sub">Nextier Technologies · tb@outreachglobal.io</div>
+  </div>
+
+  <div class="foot">
+    <p class="fq">"Better Data. Better Decisions. Better Results."</p>
+    <p>© Nextier Technologies — <b>Detection · Prioritization · Proof.</b></p>
+  </div>
+
+</div>
+</body></html>
