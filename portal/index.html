@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Blue Harbor Property Group — Data Engine Portal (Demo)</title>
+<meta name="description" content="Built-to-suit client portal demo — white-label Data Engine by Nextier. All figures fictional."/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='12' fill='%235578a8'/%3E%3C/svg%3E"/>
+<style>
+  :root{
+    --bg:#000;--panel:#0b0b0d;--panel2:#070708;--line:#1a1a1e;--line2:#28282f;
+    --ink:#f2f3f5;--muted:#9a9aa6;--faint:#61616b;
+    --brand:#5578a8;--brand-dim:#3d5878;--gold:#c6a15b;
+    --pos:#5a8a6b;--warn:#b3924f;--hot:#b0564c;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px 80px}
+  .serif{font-family:Georgia,"Times New Roman",serif}
+  .tnum{font-variant-numeric:tabular-nums}
+  a{color:var(--gold);text-decoration:none}
+
+  /* top bar = the "logged in" chrome */
+  .bar{display:flex;align-items:center;justify-content:space-between;gap:14px;
+       border-bottom:1px solid var(--line2);padding:14px 0}
+  .bar .brand{display:flex;align-items:center;gap:10px}
+  .bar .mark{width:26px;height:26px;border-radius:4px;background:linear-gradient(135deg,var(--brand),#7ea0cc)}
+  .bar .bn{font-size:14px;font-weight:700;letter-spacing:.4px}
+  .bar .bn small{display:block;font-size:9.5px;font-weight:700;letter-spacing:2px;color:var(--faint);text-transform:uppercase}
+  .bar .user{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted)}
+  .bar .avatar{width:24px;height:24px;border-radius:50%;background:var(--panel);border:1px solid var(--line2);
+               display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--brand)}
+  .live{display:inline-flex;align-items:center;gap:6px;font-size:9.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--pos)}
+  .live .d{width:6px;height:6px;border-radius:50%;background:var(--pos)}
+
+  .greet{padding:26px 0 6px}
+  .greet h1{font-family:Georgia,serif;font-weight:600;font-size:27px;margin:0;letter-spacing:.2px}
+  .greet h1 em{color:var(--gold);font-style:italic}
+  .greet p{font-size:12.5px;color:var(--muted);margin:8px 0 0;max-width:620px}
+
+  .sec{margin-top:34px}
+  .kicker{font-size:10px;font-weight:700;letter-spacing:2.2px;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+
+  .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);border-radius:3px;overflow:hidden}
+  @media(max-width:640px){.tiles{grid-template-columns:1fr}}
+  .tile{padding:20px 22px;border-right:1px solid var(--line);background:var(--panel2)}
+  .tile:last-child{border-right:none}
+  .tile .n{font-size:31px;font-weight:600;letter-spacing:-.5px}
+  .tile .l{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:1.1px;margin-top:5px}
+  .tile .s{font-size:11px;color:var(--faint);margin-top:7px}
+  .tile.hot .n{color:var(--hot)}
+  .tile.brand .n{color:#8fb0d9}
+  .tile.pos .n{color:var(--pos)}
+
+  .grid2{display:grid;grid-template-columns:3fr 2fr;gap:16px}
+  @media(max-width:720px){.grid2{grid-template-columns:1fr}}
+  .panel{border:1px solid var(--line);border-radius:3px;background:var(--panel2);padding:18px 20px}
+  .panel .pt{font-size:13px;font-weight:700;margin-bottom:12px}
+  .panel .pt small{color:var(--faint);font-weight:400;margin-left:8px;font-size:11px}
+
+  .bars{display:flex;align-items:flex-end;gap:8px;height:120px;padding-top:6px}
+  .bcol{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+  .bcol i{display:block;width:100%;background:linear-gradient(180deg,#7ea0cc,var(--brand-dim));border-radius:2px 2px 0 0}
+  .bcol span{font-size:9px;color:var(--faint);letter-spacing:.5px}
+  .bcol b{font-size:10px;color:var(--muted);font-weight:600}
+
+  .rows .r{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--line)}
+  .rows .r:last-child{border-bottom:none}
+  .rows .geo{width:110px;font-size:12px;color:var(--ink);white-space:nowrap}
+  .rows .track{flex:1;height:6px;background:var(--panel);border-radius:2px;overflow:hidden}
+  .rows .track i{display:block;height:100%;background:linear-gradient(90deg,var(--brand-dim),#7ea0cc)}
+  .rows .v{width:60px;text-align:right;font-size:12px;font-weight:600}
+
+  table.feed{border-collapse:collapse;width:100%;font-size:12.5px}
+  .feed th{text-align:left;font-size:9.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);
+           border-bottom:1px solid var(--line2);padding:8px 10px;font-weight:700;background:var(--panel)}
+  .feed td{padding:9px 10px;border-bottom:1px solid var(--line)}
+  .feed tr:last-child td{border-bottom:none}
+  .sig{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.6px;border-radius:2px;padding:2px 7px;border:1px solid var(--line2)}
+  .sig.pf{color:#e0a8a4;border-color:#4a2f2c}
+  .sig.est{color:#c4b4e4;border-color:#3c3452}
+  .sig.vac{color:#a8c4b4;border-color:#2c4438}
+  .sig.exp{color:#d9c48f;border-color:#4a3f28}
+  .feed .who{font-weight:600}
+  .feed .geo2{color:var(--muted);font-size:11.5px}
+  .feed .eq{color:var(--pos);font-weight:600}
+
+  .boundary{margin-top:34px;border:1px solid #4a3f28;border-left:2px solid var(--gold);border-radius:3px;background:var(--panel);padding:16px 20px}
+  .boundary b{color:var(--gold)}
+  .boundary p{margin:0;font-size:12.5px;color:var(--muted)}
+
+  .foot{margin-top:40px;padding-top:18px;border-top:1px solid var(--line2);color:var(--faint);font-size:11.5px;line-height:1.8}
+  .foot b{color:var(--muted)}
+  .badge{display:inline-block;margin-top:8px;font-size:9.5px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;
+         border:1px solid var(--line2);border-radius:2px;padding:3px 9px;color:var(--faint)}
+</style></head>
+<body>
+<div class="wrap">
+
+  <div class="bar">
+    <div class="brand">
+      <div class="mark"></div>
+      <div class="bn">Blue Harbor Property Group<small>Data Engine Portal</small></div>
+    </div>
+    <div class="user">
+      <span class="live"><span class="d"></span>Live</span>
+      <div class="avatar">BH</div>
+      <span>portal@blueharbor — client login</span>
+    </div>
+  </div>
+
+  <div class="greet">
+    <h1 class="serif">Good morning. Your book got <em>stronger</em> overnight.</h1>
+    <p>Everything below is yours — your territory, your signals, your pipeline. Detected, enriched, scored, and re-verified monthly. Read-only and tamper-proof: the engine shows the truth, it never touches it.</p>
+  </div>
+
+  <div class="sec">
+    <div class="kicker">Your Book — live</div>
+    <div class="tiles">
+      <div class="tile brand"><div class="n tnum">42,318</div><div class="l">Total book</div><div class="s">properties tracked across your territory</div></div>
+      <div class="tile pos"><div class="n tnum">27,904</div><div class="l">Ready to move</div><div class="s">traced mobiles · DNC-checked · reachable now</div></div>
+      <div class="tile hot"><div class="n tnum">63</div><div class="l">Live opportunities</div><div class="s">hand-raisers awaiting your next touch</div></div>
+    </div>
+  </div>
+
+  <div class="sec grid2">
+    <div class="panel">
+      <div class="pt">Why Now — signals by month <small>fresh reasons to act</small></div>
+      <div class="bars">
+        <div class="bcol"><b>412</b><i style="height:34%"></i><span>FEB</span></div>
+        <div class="bcol"><b>590</b><i style="height:48%"></i><span>MAR</span></div>
+        <div class="bcol"><b>648</b><i style="height:53%"></i><span>APR</span></div>
+        <div class="bcol"><b>884</b><i style="height:72%"></i><span>MAY</span></div>
+        <div class="bcol"><b>1,046</b><i style="height:85%"></i><span>JUN</span></div>
+        <div class="bcol"><b>1,238</b><i style="height:100%"></i><span>JUL</span></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="pt">Your Territory <small>book by county</small></div>
+      <div class="rows">
+        <div class="r"><span class="geo">Suffolk</span><span class="track"><i style="width:100%"></i></span><b class="v tnum">14,092</b></div>
+        <div class="r"><span class="geo">Nassau</span><span class="track"><i style="width:74%"></i></span><b class="v tnum">10,441</b></div>
+        <div class="r"><span class="geo">Queens</span><span class="track"><i style="width:52%"></i></span><b class="v tnum">7,317</b></div>
+        <div class="r"><span class="geo">Kings</span><span class="track"><i style="width:41%"></i></span><b class="v tnum">5,780</b></div>
+        <div class="r"><span class="geo">Westchester</span><span class="track"><i style="width:33%"></i></span><b class="v tnum">4,688</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="kicker">Event Signal Feed — as it lands</div>
+    <div class="panel" style="padding:0;overflow-x:auto">
+      <table class="feed">
+        <thead><tr><th>Owner</th><th>Property</th><th>Signal</th><th>Filed</th><th>Lender</th><th>Equity</th></tr></thead>
+        <tbody>
+          <tr><td class="who">R. Delgado</td><td class="geo2">Bay Shore, NY · Suffolk</td><td><span class="sig pf">PRE-FORECLOSURE</span></td><td class="tnum">Jul 02</td><td class="geo2">Meridian Mortgage</td><td class="eq tnum">91%</td></tr>
+          <tr><td class="who">M. Okafor</td><td class="geo2">Hempstead, NY · Nassau</td><td><span class="sig est">ESTATE / INHERITED</span></td><td class="tnum">Jul 02</td><td class="geo2">—</td><td class="eq tnum">100%</td></tr>
+          <tr><td class="who">T. Caruso</td><td class="geo2">Jamaica, NY · Queens</td><td><span class="sig pf">LIS PENDENS</span></td><td class="tnum">Jul 01</td><td class="geo2">Harborline Servicing</td><td class="eq tnum">78%</td></tr>
+          <tr><td class="who">S. Villanueva</td><td class="geo2">Yonkers, NY · Westchester</td><td><span class="sig vac">VACANT</span></td><td class="tnum">Jun 30</td><td class="geo2">—</td><td class="eq tnum">64%</td></tr>
+          <tr><td class="who">D. Prescott</td><td class="geo2">Bellmore, NY · Nassau</td><td><span class="sig exp">MLS EXPIRED</span></td><td class="tnum">Jun 30</td><td class="geo2">Crestway Lending</td><td class="eq tnum">55%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="boundary">
+    <p><b>The boundary:</b> this portal is read-only by design. Your pipeline is detected, scored, and staged here — <b>nothing contacts anyone until you say go.</b> Execution runs on your rail, behind your approval, every time.</p>
+  </div>
+
+  <div class="foot">
+    <b>This is a staged demo.</b> All names, figures, and records on this page are fictional. The live portal runs on your own isolated database, your domain, your brand — with a real client login exactly like this one.<br/>
+    White-label Data Engine by <b>Nextier Technologies</b> · tb@outreachglobal.io
+    <div class="badge">Your brand here — built to suit</div>
+  </div>
+
+</div>
+</body></html>
