@@ -2,176 +2,665 @@
 <html lang="en"><head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Blue Harbor Property Group — Data Engine Portal (Demo)</title>
-<meta name="description" content="Built-to-suit client portal demo — white-label Data Engine by Nextier. All figures fictional."/>
+<title>Blue Harbor Property Group — Data Engine (Demo)</title>
+<meta name="description" content="White-label Data Engine demo portal — detect, enrich, score, stage, execute. All data fictional. Nextier Technologies."/>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='12' fill='%235578a8'/%3E%3C/svg%3E"/>
 <style>
   :root{
     --bg:#000;--panel:#0b0b0d;--panel2:#070708;--line:#1a1a1e;--line2:#28282f;
     --ink:#f2f3f5;--muted:#9a9aa6;--faint:#61616b;
-    --brand:#5578a8;--brand-dim:#3d5878;--gold:#c6a15b;
-    --pos:#5a8a6b;--warn:#b3924f;--hot:#b0564c;
+    --brand:#5578a8;--brand-hi:#8fb0d9;--brand-dim:#3d5878;--gold:#c6a15b;--gold-dim:#8a7440;
+    --pos:#5a8a6b;--warn:#b3924f;--hot:#b0564c;--violet:#8071a1;
   }
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);
-       font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:1080px;margin:0 auto;padding:0 22px 80px}
+  html,body{margin:0;height:100%}
+  body{background:var(--bg);color:var(--ink);
+       font:14px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       -webkit-font-smoothing:antialiased}
   .serif{font-family:Georgia,"Times New Roman",serif}
-  .tnum{font-variant-numeric:tabular-nums}
-  a{color:var(--gold);text-decoration:none}
+  .tnum{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
 
-  /* top bar = the "logged in" chrome */
-  .bar{display:flex;align-items:center;justify-content:space-between;gap:14px;
-       border-bottom:1px solid var(--line2);padding:14px 0}
-  .bar .brand{display:flex;align-items:center;gap:10px}
-  .bar .mark{width:26px;height:26px;border-radius:4px;background:linear-gradient(135deg,var(--brand),#7ea0cc)}
-  .bar .bn{font-size:14px;font-weight:700;letter-spacing:.4px}
-  .bar .bn small{display:block;font-size:9.5px;font-weight:700;letter-spacing:2px;color:var(--faint);text-transform:uppercase}
-  .bar .user{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted)}
-  .bar .avatar{width:24px;height:24px;border-radius:50%;background:var(--panel);border:1px solid var(--line2);
-               display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--brand)}
-  .live{display:inline-flex;align-items:center;gap:6px;font-size:9.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--pos)}
-  .live .d{width:6px;height:6px;border-radius:50%;background:var(--pos)}
+  /* ── app frame ─────────────────────────────────────────── */
+  .app{display:grid;grid-template-columns:216px 1fr;min-height:100vh}
+  @media(max-width:840px){.app{grid-template-columns:1fr}.side{position:sticky;top:0;z-index:20;flex-direction:row!important;overflow-x:auto;border-right:none!important;border-bottom:1px solid var(--line2)}.side .brand{display:none!important}.side .grp{display:none}.side nav{flex-direction:row!important;padding:8px!important;gap:4px!important}.side .foot-side{display:none}}
+  .side{display:flex;flex-direction:column;border-right:1px solid var(--line2);background:var(--panel2)}
+  .side .brand{display:flex;align-items:center;gap:10px;padding:18px 16px;border-bottom:1px solid var(--line)}
+  .side .mark{width:28px;height:28px;border-radius:5px;background:linear-gradient(135deg,var(--brand),var(--brand-hi));flex:0 0 28px}
+  .side .bn{font-size:13px;font-weight:700;line-height:1.2}
+  .side .bn small{display:block;font-size:8.5px;font-weight:700;letter-spacing:2px;color:var(--faint);text-transform:uppercase}
+  .side nav{display:flex;flex-direction:column;gap:2px;padding:12px 10px;flex:1}
+  .side .grp{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--faint);padding:12px 8px 4px}
+  .nl{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:4px;font-size:12.5px;font-weight:600;
+      color:var(--muted);cursor:pointer;border:1px solid transparent;white-space:nowrap;background:none;text-align:left;font-family:inherit}
+  .nl:hover{color:var(--ink);background:rgba(255,255,255,.03)}
+  .nl.active{color:var(--brand-hi);background:rgba(85,120,168,.12);border-color:rgba(85,120,168,.25)}
+  .nl .ic{width:15px;text-align:center;font-size:12px;opacity:.9}
+  .nl .pill{margin-left:auto;font-size:9px;font-weight:700;background:rgba(176,86,76,.2);color:#e0a8a4;border-radius:8px;padding:1px 7px}
+  .foot-side{padding:12px 16px;border-top:1px solid var(--line);font-size:9.5px;color:var(--faint);line-height:1.6}
 
-  .greet{padding:26px 0 6px}
-  .greet h1{font-family:Georgia,serif;font-weight:600;font-size:27px;margin:0;letter-spacing:.2px}
-  .greet h1 em{color:var(--gold);font-style:italic}
-  .greet p{font-size:12.5px;color:var(--muted);margin:8px 0 0;max-width:620px}
+  .main{min-width:0}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 24px;border-bottom:1px solid var(--line2);position:sticky;top:0;background:rgba(0,0,0,.92);backdrop-filter:blur(6px);z-index:10}
+  .topbar .crumb{font-size:12px;color:var(--muted)}
+  .topbar .crumb b{color:var(--ink)}
+  .right-top{display:flex;align-items:center;gap:12px;font-size:11px;color:var(--muted)}
+  .live{display:inline-flex;align-items:center;gap:6px;font-size:9px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--pos)}
+  .live .d{width:6px;height:6px;border-radius:50%;background:var(--pos);animation:blink 2.2s infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+  .avatar{width:24px;height:24px;border-radius:50%;background:var(--panel);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:700;color:var(--brand-hi)}
 
-  .sec{margin-top:34px}
-  .kicker{font-size:10px;font-weight:700;letter-spacing:2.2px;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+  .page{padding:22px 24px 70px;max-width:1180px}
+  .view{display:none}
+  .view.on{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
-  .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);border-radius:3px;overflow:hidden}
-  @media(max-width:640px){.tiles{grid-template-columns:1fr}}
-  .tile{padding:20px 22px;border-right:1px solid var(--line);background:var(--panel2)}
-  .tile:last-child{border-right:none}
-  .tile .n{font-size:31px;font-weight:600;letter-spacing:-.5px}
-  .tile .l{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:1.1px;margin-top:5px}
-  .tile .s{font-size:11px;color:var(--faint);margin-top:7px}
-  .tile.hot .n{color:var(--hot)}
-  .tile.brand .n{color:#8fb0d9}
-  .tile.pos .n{color:var(--pos)}
+  .kicker{font-size:10px;font-weight:700;letter-spacing:2.2px;text-transform:uppercase;color:var(--gold);margin:0 0 6px}
+  h1.pgt{font-family:Georgia,serif;font-weight:600;font-size:24px;margin:0 0 6px;letter-spacing:.2px}
+  h1.pgt em{color:var(--gold);font-style:italic}
+  .sub{font-size:12.5px;color:var(--muted);margin:0 0 20px;max-width:640px}
 
-  .grid2{display:grid;grid-template-columns:3fr 2fr;gap:16px}
-  @media(max-width:720px){.grid2{grid-template-columns:1fr}}
-  .panel{border:1px solid var(--line);border-radius:3px;background:var(--panel2);padding:18px 20px}
-  .panel .pt{font-size:13px;font-weight:700;margin-bottom:12px}
-  .panel .pt small{color:var(--faint);font-weight:400;margin-left:8px;font-size:11px}
+  /* tiles */
+  .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line);border-radius:3px;overflow:hidden;margin-bottom:16px}
+  @media(max-width:760px){.tiles{grid-template-columns:repeat(2,1fr)}}
+  .tile{padding:16px 18px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--panel2)}
+  .tile .n{font-size:27px;font-weight:600;letter-spacing:-.5px}
+  .tile .l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.1px;margin-top:4px}
+  .tile .s{font-size:10.5px;color:var(--faint);margin-top:5px}
+  .tile.brand .n{color:var(--brand-hi)}.tile.pos .n{color:var(--pos)}.tile.hot .n{color:#e0a8a4}.tile.gold .n{color:var(--gold)}
 
-  .bars{display:flex;align-items:flex-end;gap:8px;height:120px;padding-top:6px}
-  .bcol{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
-  .bcol i{display:block;width:100%;background:linear-gradient(180deg,#7ea0cc,var(--brand-dim));border-radius:2px 2px 0 0}
-  .bcol span{font-size:9px;color:var(--faint);letter-spacing:.5px}
-  .bcol b{font-size:10px;color:var(--muted);font-weight:600}
+  .grid2{display:grid;grid-template-columns:3fr 2fr;gap:14px}
+  @media(max-width:760px){.grid2{grid-template-columns:1fr}}
+  .panel{border:1px solid var(--line);border-radius:3px;background:var(--panel2);padding:16px 18px;min-width:0}
+  .panel .pt{font-size:12.5px;font-weight:700;margin-bottom:12px}
+  .panel .pt small{color:var(--faint);font-weight:400;margin-left:7px;font-size:10.5px}
 
-  .rows .r{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--line)}
+  .bars{display:flex;align-items:flex-end;gap:7px;height:110px}
+  .bcol{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;justify-content:flex-end;height:100%}
+  .bcol i{display:block;width:100%;background:linear-gradient(180deg,var(--brand-hi),var(--brand-dim));border-radius:2px 2px 0 0;transition:height 1s ease}
+  .bcol span{font-size:8.5px;color:var(--faint);letter-spacing:.5px}
+  .bcol b{font-size:9.5px;color:var(--muted);font-weight:600}
+
+  .rows .r{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}
   .rows .r:last-child{border-bottom:none}
-  .rows .geo{width:110px;font-size:12px;color:var(--ink);white-space:nowrap}
+  .rows .geo{width:96px;font-size:11.5px;white-space:nowrap}
   .rows .track{flex:1;height:6px;background:var(--panel);border-radius:2px;overflow:hidden}
-  .rows .track i{display:block;height:100%;background:linear-gradient(90deg,var(--brand-dim),#7ea0cc)}
-  .rows .v{width:60px;text-align:right;font-size:12px;font-weight:600}
+  .rows .track i{display:block;height:100%;background:linear-gradient(90deg,var(--brand-dim),var(--brand-hi))}
+  .rows .v{width:56px;text-align:right;font-size:11.5px;font-weight:600}
 
-  table.feed{border-collapse:collapse;width:100%;font-size:12.5px}
-  .feed th{text-align:left;font-size:9.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);
-           border-bottom:1px solid var(--line2);padding:8px 10px;font-weight:700;background:var(--panel)}
-  .feed td{padding:9px 10px;border-bottom:1px solid var(--line)}
-  .feed tr:last-child td{border-bottom:none}
-  .sig{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.6px;border-radius:2px;padding:2px 7px;border:1px solid var(--line2)}
-  .sig.pf{color:#e0a8a4;border-color:#4a2f2c}
-  .sig.est{color:#c4b4e4;border-color:#3c3452}
-  .sig.vac{color:#a8c4b4;border-color:#2c4438}
-  .sig.exp{color:#d9c48f;border-color:#4a3f28}
-  .feed .who{font-weight:600}
-  .feed .geo2{color:var(--muted);font-size:11.5px}
+  /* feed table */
+  .tblwrap{border:1px solid var(--line);border-radius:3px;overflow-x:auto;background:var(--panel2)}
+  table.feed{border-collapse:collapse;width:100%;font-size:12px;min-width:640px}
+  .feed th{text-align:left;font-size:9px;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);
+           border-bottom:1px solid var(--line2);padding:8px 10px;font-weight:700;background:var(--panel);position:sticky;top:0}
+  .feed td{padding:8px 10px;border-bottom:1px solid var(--line)}
+  .feed tr.new-row{animation:rowin .8s ease}
+  @keyframes rowin{from{background:rgba(198,161,91,.18)}to{background:transparent}}
+  .sig{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.6px;border-radius:2px;padding:2px 7px;border:1px solid var(--line2);white-space:nowrap}
+  .sig.pf{color:#e0a8a4;border-color:#4a2f2c}.sig.lp{color:#e0b8a4;border-color:#4a382c}
+  .sig.est{color:#c4b4e4;border-color:#3c3452}.sig.vac{color:#a8c4b4;border-color:#2c4438}
+  .sig.exp{color:#d9c48f;border-color:#4a3f28}.sig.tax{color:#9fc0d9;border-color:#2c3c4a}
+  .feed .who{font-weight:600;white-space:nowrap}
+  .feed .geo2{color:var(--muted);font-size:11px;white-space:nowrap}
   .feed .eq{color:var(--pos);font-weight:600}
+  .chipbar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+  .chip{font-size:10px;font-weight:700;letter-spacing:.5px;border:1px solid var(--line2);border-radius:2px;background:none;color:var(--muted);padding:5px 11px;cursor:pointer;font-family:inherit}
+  .chip.on{color:var(--gold);border-color:var(--gold-dim);background:rgba(198,161,91,.08)}
 
-  .boundary{margin-top:34px;border:1px solid #4a3f28;border-left:2px solid var(--gold);border-radius:3px;background:var(--panel);padding:16px 20px}
-  .boundary b{color:var(--gold)}
-  .boundary p{margin:0;font-size:12.5px;color:var(--muted)}
+  /* kanban */
+  .kan{display:flex;gap:10px;overflow-x:auto;padding-bottom:8px}
+  .kcol{flex:0 0 210px;border:1px solid var(--line);border-radius:3px;background:var(--panel2)}
+  .kcol .kh{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line)}
+  .kcol .kh b{font-size:11px;letter-spacing:.4px}
+  .kcol .kh .cnt{font-size:10px;font-weight:700;background:rgba(85,120,168,.18);color:var(--brand-hi);border-radius:8px;padding:1px 8px}
+  .kcol .kh .cnt.zero{background:var(--panel);color:var(--faint)}
+  .kcol .kb{font-size:9.5px;color:var(--faint);padding:6px 12px 4px}
+  .kcards{display:flex;flex-direction:column;gap:6px;padding:8px;max-height:340px;overflow-y:auto}
+  .kc{border:1px solid var(--line);border-left:3px solid var(--line2);border-radius:2px;background:var(--panel);padding:8px 10px}
+  .kc .nm{font-size:11.5px;font-weight:600}
+  .kc .in{font-size:10px;color:var(--muted);margin-top:2px}
+  .kc .msg{font-size:10px;color:var(--faint);font-style:italic;margin-top:4px;font-family:Georgia,serif}
+  .kc.hot{border-left-color:var(--hot)}.kc.warm{border-left-color:var(--gold-dim)}.kc.cool{border-left-color:var(--brand-dim)}
+  .kempty{font-size:10px;color:var(--faint);padding:14px 12px;font-style:italic}
 
-  .foot{margin-top:40px;padding-top:18px;border-top:1px solid var(--line2);color:var(--faint);font-size:11.5px;line-height:1.8}
+  /* segmented lead pools */
+  .pools{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media(max-width:820px){.pools{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.pools{grid-template-columns:1fr}}
+  .pool{border:1px solid var(--line);border-left:3px solid var(--brand-dim);border-radius:3px;background:var(--panel2);padding:15px 16px;display:flex;flex-direction:column;gap:9px}
+  .pool.pf{border-left-color:var(--hot)}.pool.est{border-left-color:var(--violet)}
+  .pool.vac{border-left-color:var(--pos)}.pool.exp{border-left-color:var(--warn)}
+  .pool.eq{border-left-color:var(--brand-hi)}.pool.tax{border-left-color:#5f88a0}
+  .pool .ph{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  .pool .pn{font-size:12.5px;font-weight:700}
+  .pool .pc{font-size:22px;font-weight:600;letter-spacing:-.4px}
+  .pool .pd{font-size:10.5px;color:var(--faint)}
+  .pool .rmeter{height:5px;background:var(--panel);border-radius:2px;overflow:hidden}
+  .pool .rmeter i{display:block;height:100%;background:linear-gradient(90deg,#2c4438,var(--pos))}
+  .pool .pmeta{display:flex;justify-content:space-between;font-size:10px;color:var(--muted)}
+  .pool .pmeta b{color:var(--pos)}
+  .pool .carve{margin-top:2px;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+    border:1px solid var(--gold-dim);color:var(--gold);background:rgba(198,161,91,.07);border-radius:2px;padding:7px 0;text-align:center;cursor:pointer;font-family:inherit}
+  .pool .carve:hover{background:rgba(198,161,91,.16)}
+  .pool .carve.done{border-color:#2c4438;color:var(--pos);background:rgba(90,138,107,.08);cursor:default}
+
+  /* campaign block directory table */
+  .dir{border:1px solid var(--line);border-radius:3px;overflow-x:auto;background:var(--panel2);margin-bottom:18px}
+  table.dirt{border-collapse:collapse;width:100%;font-size:12px;min-width:640px}
+  .dirt th{text-align:left;font-size:9px;letter-spacing:1.3px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line2);padding:8px 12px;font-weight:700;background:var(--panel)}
+  .dirt td{padding:9px 12px;border-bottom:1px solid var(--line)}
+  .dirt tr:last-child td{border-bottom:none}
+  .dirt .bn2{font-weight:600}
+  .dirt .mut{color:var(--muted);font-size:11px}
+
+  /* blocks board */
+  .bstate{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.8px;border-radius:2px;padding:2px 8px}
+  .bstate.held{background:rgba(198,161,91,.14);color:var(--gold);border:1px solid var(--gold-dim)}
+  .bstate.launched{background:rgba(85,120,168,.14);color:var(--brand-hi);border:1px solid var(--brand-dim)}
+  .bstate.sent{background:rgba(90,138,107,.14);color:var(--pos);border:1px solid #2c4438}
+  .blk .in2{display:flex;justify-content:space-between;gap:8px;font-size:10px;color:var(--muted);margin-top:5px}
+  .blk .bar2{height:5px;background:var(--panel);border-radius:2px;overflow:hidden;margin-top:6px}
+  .blk .bar2 i{display:block;height:100%;background:linear-gradient(90deg,#2c4438,var(--pos))}
+
+  /* engine layers */
+  .layers{border:1px solid var(--line);border-radius:3px;overflow:hidden}
+  .lay{display:grid;grid-template-columns:36px 1fr auto;gap:12px;align-items:center;padding:11px 16px;border-bottom:1px solid var(--line);background:var(--panel2)}
+  .lay:last-child{border-bottom:none}
+  .lay .ix{font-family:Georgia,serif;font-style:italic;font-size:13px;color:var(--faint)}
+  .lay .ln{font-size:12.5px;font-weight:700}
+  .lay .ld{font-size:10.5px;color:var(--muted);margin-top:1px}
+  .cost{font-size:10px;font-weight:700;letter-spacing:.6px;border-radius:2px;padding:3px 9px;white-space:nowrap}
+  .cost.free{color:var(--pos);border:1px solid #2c4438}
+  .cost.dime{color:var(--gold);border:1px solid var(--gold-dim)}
+  .cost.gated{color:#e0a8a4;border:1px solid #4a2f2c}
+
+  /* wizard */
+  .wiz .q{display:grid;grid-template-columns:44px 1fr;gap:12px;padding:13px 0;border-bottom:1px solid var(--line);align-items:baseline}
+  .wiz .q:last-child{border-bottom:none}
+  .wiz .qn{font-family:Georgia,serif;font-style:italic;font-size:13px;color:var(--faint)}
+  .wiz .qt{font-size:13px;font-weight:600}
+  .wiz .qt em{color:var(--gold);font-style:normal}
+  .wiz .qa{font-size:11px;color:var(--brand-hi);margin-top:3px}
+  .wout{margin-top:14px;border:1px solid var(--gold-dim);border-left:2px solid var(--gold);border-radius:3px;padding:13px 16px;font-size:12px}
+  .wout b{color:var(--gold)}
+
+  /* START */
+  .startbtn{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--gold-dim);background:rgba(198,161,91,.1);
+    color:var(--gold);border-radius:3px;padding:13px 34px;font-size:13px;font-weight:800;letter-spacing:2.5px;cursor:pointer;font-family:inherit;text-transform:uppercase}
+  .startbtn:hover{background:rgba(198,161,91,.18)}
+  .startbtn:disabled{opacity:.5;cursor:default}
+  .checks{margin-top:18px;display:flex;flex-direction:column;gap:9px}
+  .ck{display:flex;align-items:flex-start;gap:10px;opacity:0;transform:translateY(5px);transition:all .4s ease}
+  .ck.show{opacity:1;transform:none}
+  .ck .dot2{width:9px;height:9px;border-radius:50%;background:var(--faint);margin-top:4px;flex:0 0 9px}
+  .ck.pass .dot2{background:var(--pos);box-shadow:0 0 8px rgba(90,138,107,.6)}
+  .ck .ct{font-size:12px;font-weight:600}
+  .ck .cd{font-size:10.5px;color:var(--muted)}
+  .bound{display:none;margin:22px 0;align-items:center;gap:12px}
+  .bound.show{display:flex;animation:fade .5s ease}
+  .bound .ln2{height:2px;flex:1;background:linear-gradient(90deg,transparent,var(--gold))}
+  .bound .ln3{height:2px;flex:1;background:linear-gradient(270deg,transparent,var(--gold))}
+  .bound .bx{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--gold);border:1px solid var(--gold-dim);background:rgba(198,161,91,.08);border-radius:3px;padding:8px 14px;text-transform:uppercase;text-align:center}
+  .verdict{display:none;margin-top:4px;border:1px solid #2c4438;background:rgba(90,138,107,.1);border-radius:3px;padding:13px 18px;font-size:13px;font-weight:700;color:#9fd0b4}
+  .verdict.show{display:block;animation:fade .5s ease}
+  .below{display:none;margin-top:14px}
+  .below.show{display:block;animation:fade .5s ease}
+
+  .foot{margin-top:44px;padding-top:16px;border-top:1px solid var(--line2);color:var(--faint);font-size:10.5px;line-height:1.8}
   .foot b{color:var(--muted)}
-  .badge{display:inline-block;margin-top:8px;font-size:9.5px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;
-         border:1px solid var(--line2);border-radius:2px;padding:3px 9px;color:var(--faint)}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style></head>
 <body>
-<div class="wrap">
+<div class="app">
 
-  <div class="bar">
+  <!-- SIDEBAR -->
+  <aside class="side">
     <div class="brand">
       <div class="mark"></div>
-      <div class="bn">Blue Harbor Property Group<small>Data Engine Portal</small></div>
+      <div class="bn">Blue Harbor<small>Data Engine</small></div>
     </div>
-    <div class="user">
-      <span class="live"><span class="d"></span>Live</span>
-      <div class="avatar">BH</div>
-      <span>portal@blueharbor — client login</span>
-    </div>
-  </div>
+    <nav>
+      <div class="grp">Execute</div>
+      <button class="nl active" data-v="command"><span class="ic">◈</span>Command<span class="pill" id="pill-new"></span></button>
+      <button class="nl" data-v="feed"><span class="ic">⚡</span>Signal Feed</button>
+      <button class="nl" data-v="pools"><span class="ic">◫</span>Lead Pools</button>
+      <button class="nl" data-v="pipeline"><span class="ic">▦</span>Pipeline</button>
+      <button class="nl" data-v="blocks"><span class="ic">▤</span>Campaign Blocks</button>
+      <button class="nl" data-v="start"><span class="ic">▶</span>START</button>
+      <div class="grp">The Product</div>
+      <button class="nl" data-v="engine"><span class="ic">⚙</span>The Engine</button>
+      <button class="nl" data-v="wizard"><span class="ic">✎</span>Built to Suit</button>
+    </nav>
+    <div class="foot-side">Demo portal · all data fictional<br/>White-label by <b style="color:var(--muted)">Nextier</b></div>
+  </aside>
 
-  <div class="greet">
-    <h1 class="serif">Good morning. Your book got <em>stronger</em> overnight.</h1>
-    <p>Everything below is yours — your territory, your signals, your pipeline. Detected, enriched, scored, and re-verified monthly. Read-only and tamper-proof: the engine shows the truth, it never touches it.</p>
-  </div>
-
-  <div class="sec">
-    <div class="kicker">Your Book — live</div>
-    <div class="tiles">
-      <div class="tile brand"><div class="n tnum">42,318</div><div class="l">Total book</div><div class="s">properties tracked across your territory</div></div>
-      <div class="tile pos"><div class="n tnum">27,904</div><div class="l">Ready to move</div><div class="s">traced mobiles · DNC-checked · reachable now</div></div>
-      <div class="tile hot"><div class="n tnum">63</div><div class="l">Live opportunities</div><div class="s">hand-raisers awaiting your next touch</div></div>
-    </div>
-  </div>
-
-  <div class="sec grid2">
-    <div class="panel">
-      <div class="pt">Why Now — signals by month <small>fresh reasons to act</small></div>
-      <div class="bars">
-        <div class="bcol"><b>412</b><i style="height:34%"></i><span>FEB</span></div>
-        <div class="bcol"><b>590</b><i style="height:48%"></i><span>MAR</span></div>
-        <div class="bcol"><b>648</b><i style="height:53%"></i><span>APR</span></div>
-        <div class="bcol"><b>884</b><i style="height:72%"></i><span>MAY</span></div>
-        <div class="bcol"><b>1,046</b><i style="height:85%"></i><span>JUN</span></div>
-        <div class="bcol"><b>1,238</b><i style="height:100%"></i><span>JUL</span></div>
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <span class="crumb"><b>Blue Harbor Property Group</b> · Long Island + NYC territory</span>
+      <div class="right-top">
+        <span class="live"><span class="d"></span>Live · <span id="lastEvent">last signal 4s ago</span></span>
+        <div class="avatar">BH</div>
       </div>
     </div>
-    <div class="panel">
-      <div class="pt">Your Territory <small>book by county</small></div>
-      <div class="rows">
-        <div class="r"><span class="geo">Suffolk</span><span class="track"><i style="width:100%"></i></span><b class="v tnum">14,092</b></div>
-        <div class="r"><span class="geo">Nassau</span><span class="track"><i style="width:74%"></i></span><b class="v tnum">10,441</b></div>
-        <div class="r"><span class="geo">Queens</span><span class="track"><i style="width:52%"></i></span><b class="v tnum">7,317</b></div>
-        <div class="r"><span class="geo">Kings</span><span class="track"><i style="width:41%"></i></span><b class="v tnum">5,780</b></div>
-        <div class="r"><span class="geo">Westchester</span><span class="track"><i style="width:33%"></i></span><b class="v tnum">4,688</b></div>
+
+    <div class="page">
+
+      <!-- ═══ COMMAND ═══ -->
+      <section class="view on" id="v-command">
+        <p class="kicker">Command</p>
+        <h1 class="pgt serif">Your book got <em>stronger</em> overnight.</h1>
+        <p class="sub">Your territory, detected and scored while you slept. Everything here is read-only truth — the engine prepares; you execute.</p>
+        <div class="tiles">
+          <div class="tile brand"><div class="n tnum" data-count="42318">0</div><div class="l">Total book</div><div class="s">properties tracked</div></div>
+          <div class="tile pos"><div class="n tnum" data-count="27904">0</div><div class="l">Ready to move</div><div class="s">traced · DNC-checked</div></div>
+          <div class="tile hot"><div class="n tnum" data-count="63">0</div><div class="l">Live opportunities</div><div class="s">hand-raisers now</div></div>
+          <div class="tile gold"><div class="n tnum" data-count="1238">0</div><div class="l">Signals this month</div><div class="s">fresh reasons to act</div></div>
+        </div>
+        <div class="grid2">
+          <div class="panel">
+            <div class="pt">Why Now — signals by month<small>detection is free · compounds monthly</small></div>
+            <div class="bars">
+              <div class="bcol"><b>412</b><i style="height:0%" data-h="34%"></i><span>FEB</span></div>
+              <div class="bcol"><b>590</b><i style="height:0%" data-h="48%"></i><span>MAR</span></div>
+              <div class="bcol"><b>648</b><i style="height:0%" data-h="53%"></i><span>APR</span></div>
+              <div class="bcol"><b>884</b><i style="height:0%" data-h="72%"></i><span>MAY</span></div>
+              <div class="bcol"><b>1,046</b><i style="height:0%" data-h="85%"></i><span>JUN</span></div>
+              <div class="bcol"><b>1,238</b><i style="height:0%" data-h="100%"></i><span>JUL</span></div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="pt">Your Territory<small>book by county</small></div>
+            <div class="rows">
+              <div class="r"><span class="geo">Suffolk</span><span class="track"><i style="width:100%"></i></span><b class="v tnum">14,092</b></div>
+              <div class="r"><span class="geo">Nassau</span><span class="track"><i style="width:74%"></i></span><b class="v tnum">10,441</b></div>
+              <div class="r"><span class="geo">Queens</span><span class="track"><i style="width:52%"></i></span><b class="v tnum">7,317</b></div>
+              <div class="r"><span class="geo">Kings</span><span class="track"><i style="width:41%"></i></span><b class="v tnum">5,780</b></div>
+              <div class="r"><span class="geo">Westchester</span><span class="track"><i style="width:33%"></i></span><b class="v tnum">4,688</b></div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:14px" class="panel">
+          <div class="pt">Event Signal Feed<small>live — new signals land here the moment they're detected</small></div>
+          <div class="tblwrap" style="border:none">
+            <table class="feed"><thead><tr><th>Owner</th><th>Property</th><th>Signal</th><th>Filed</th><th>Lender</th><th>Equity</th></tr></thead>
+            <tbody id="cmdFeed"></tbody></table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ SIGNAL FEED ═══ -->
+      <section class="view" id="v-feed">
+        <p class="kicker">Signal Feed</p>
+        <h1 class="pgt serif">Every signal, <em>as it lands.</em></h1>
+        <p class="sub">Distress and opportunity events across your territory — pre-foreclosure, lis pendens, estate, vacancy, expired, tax. Stacked signals rise to the top.</p>
+        <div class="chipbar" id="sigFilters">
+          <button class="chip on" data-f="all">ALL</button>
+          <button class="chip" data-f="pf">PRE-FORECLOSURE</button>
+          <button class="chip" data-f="lp">LIS PENDENS</button>
+          <button class="chip" data-f="est">ESTATE</button>
+          <button class="chip" data-f="vac">VACANT</button>
+          <button class="chip" data-f="exp">MLS EXPIRED</button>
+          <button class="chip" data-f="tax">TAX</button>
+        </div>
+        <div class="tblwrap">
+          <table class="feed"><thead><tr><th>Owner</th><th>Property</th><th>Signal</th><th>Filed</th><th>Lender / Case</th><th>Mtg bal</th><th>Equity</th></tr></thead>
+          <tbody id="bigFeed"></tbody></table>
+        </div>
+      </section>
+
+      <!-- ═══ SEGMENTED LEAD POOLS ═══ -->
+      <section class="view" id="v-pools">
+        <p class="kicker">Segmented Lead Pools</p>
+        <h1 class="pgt serif">Your book, <em>pre-sorted</em> by situation.</h1>
+        <p class="sub">Every lead auto-tagged into the pool that matches its signal, equity, and reachability. Carve any pool into a held campaign block in one click — nothing sends until you approve it.</p>
+        <div class="chipbar">
+          <button class="chip on">ALL COUNTIES</button>
+          <button class="chip">SUFFOLK</button>
+          <button class="chip">NASSAU</button>
+          <button class="chip">QUEENS</button>
+          <button class="chip">KINGS</button>
+        </div>
+        <div class="pools" id="poolGrid"></div>
+      </section>
+
+      <!-- ═══ PIPELINE ═══ -->
+      <section class="view" id="v-pipeline">
+        <p class="kicker">Pipeline — Execution Matrix</p>
+        <h1 class="pgt serif">State-driven. <em>Current stays current.</em></h1>
+        <p class="sub">Every lead lands in a bucket by its state. This month starts clean; aged sits one click away — nothing is ever deleted.</p>
+        <div class="chipbar">
+          <button class="chip on" id="tabCur">CURRENT MONTH</button>
+          <button class="chip" id="tabAged">AGED</button>
+        </div>
+        <div class="kan" id="kanban"></div>
+      </section>
+
+      <!-- ═══ BLOCKS ═══ -->
+      <section class="view" id="v-blocks">
+        <p class="kicker">Campaign Block Directory</p>
+        <h1 class="pgt serif">Every block, <em>by state.</em></h1>
+        <p class="sub">The full directory of your campaign blocks, and the same board by execution state. Held blocks are inert — nothing sends until you approve the launch.</p>
+        <div class="dir">
+          <table class="dirt"><thead><tr><th>Block</th><th>State</th><th>Signal pool</th><th>Leads</th><th>Delivered</th><th>Replies</th><th>Created</th></tr></thead>
+          <tbody>
+            <tr><td class="bn2">Aged Carve — June OPPT</td><td><span class="bstate held">HELD</span></td><td class="mut">Aged · OPPT</td><td class="tnum">412</td><td class="mut">—</td><td class="mut">—</td><td class="mut tnum">Jul 05</td></tr>
+            <tr><td class="bn2">Suffolk PF — July wave 2</td><td><span class="bstate held">HELD</span></td><td class="mut">Pre-Foreclosure</td><td class="tnum">1,850</td><td class="mut">—</td><td class="mut">—</td><td class="mut tnum">Jul 04</td></tr>
+            <tr><td class="bn2">Estate / Inherited — Nassau</td><td><span class="bstate held">HELD</span></td><td class="mut">Estate</td><td class="tnum">640</td><td class="mut">—</td><td class="mut">—</td><td class="mut tnum">Jul 03</td></tr>
+            <tr><td class="bn2">Suffolk PF — July wave 1</td><td><span class="bstate launched">SENDING</span></td><td class="mut">Pre-Foreclosure</td><td class="tnum">2,000</td><td class="tnum">1,304</td><td class="tnum">22</td><td class="mut tnum">Jul 02</td></tr>
+            <tr><td class="bn2">Queens LP — June</td><td><span class="bstate sent">DELIVERED</span></td><td class="mut">Lis Pendens</td><td class="tnum">2,050</td><td class="tnum">1,988</td><td class="tnum">41</td><td class="mut tnum">Jun 28</td></tr>
+            <tr><td class="bn2">Vacant — Kings June</td><td><span class="bstate sent">DELIVERED</span></td><td class="mut">Vacant</td><td class="tnum">1,540</td><td class="tnum">1,430</td><td class="tnum">28</td><td class="mut tnum">Jun 24</td></tr>
+            <tr><td class="bn2">MLS Expired — May</td><td><span class="bstate sent">COMPLETE</span></td><td class="mut">MLS Expired</td><td class="tnum">2,280</td><td class="tnum">2,214</td><td class="tnum">52</td><td class="mut tnum">May 30</td></tr>
+            <tr><td class="bn2">High-Equity Absentee — May</td><td><span class="bstate sent">COMPLETE</span></td><td class="mut">Absentee · High-Equity</td><td class="tnum">1,760</td><td class="tnum">1,704</td><td class="tnum">33</td><td class="mut tnum">May 22</td></tr>
+          </tbody></table>
+        </div>
+        <p class="kicker" style="margin-top:6px">By execution state</p>
+        <div class="kan">
+          <div class="kcol" style="flex-basis:250px">
+            <div class="kh"><b>HELD · PREVIEWED</b><span class="cnt">3</span></div>
+            <div class="kb">inert — awaiting your approval</div>
+            <div class="kcards">
+              <div class="kc blk warm"><div class="nm">Aged Carve — June OPPT</div><span class="bstate held">HELD</span><div class="in2"><span>412 leads staged</span><span>draft attached</span></div></div>
+              <div class="kc blk warm"><div class="nm">Suffolk PF — July wave 2</div><span class="bstate held">HELD</span><div class="in2"><span>1,850 leads</span><span>draft attached</span></div></div>
+              <div class="kc blk warm"><div class="nm">Estate / Inherited — Nassau</div><span class="bstate held">HELD</span><div class="in2"><span>640 leads</span><span>draft attached</span></div></div>
+            </div>
+          </div>
+          <div class="kcol" style="flex-basis:250px">
+            <div class="kh"><b>LAUNCHED</b><span class="cnt">1</span></div>
+            <div class="kb">crossed the boundary — your click</div>
+            <div class="kcards">
+              <div class="kc blk cool"><div class="nm">Suffolk PF — July wave 1</div><span class="bstate launched">SENDING</span><div class="in2"><span>2,000 leads</span><span>1,304 sent</span></div><div class="bar2"><i style="width:65%"></i></div></div>
+            </div>
+          </div>
+          <div class="kcol" style="flex-basis:250px">
+            <div class="kh"><b>SENT · COMPLETE</b><span class="cnt">4</span></div>
+            <div class="kb">ledger-backed results</div>
+            <div class="kcards">
+              <div class="kc blk"><div class="nm">Queens LP — June</div><span class="bstate sent">DELIVERED</span><div class="in2"><span>1,988 delivered</span><span>41 replies · 9 OPPT</span></div><div class="bar2"><i style="width:96%"></i></div></div>
+              <div class="kc blk"><div class="nm">Vacant — Kings June</div><span class="bstate sent">DELIVERED</span><div class="in2"><span>1,430 delivered</span><span>28 replies · 6 OPPT</span></div><div class="bar2"><i style="width:93%"></i></div></div>
+              <div class="kc blk"><div class="nm">MLS Expired — May</div><span class="bstate sent">COMPLETE</span><div class="in2"><span>2,214 delivered</span><span>52 replies · 11 OPPT</span></div><div class="bar2"><i style="width:97%"></i></div></div>
+              <div class="kc blk"><div class="nm">High Equity Absentee — May</div><span class="bstate sent">COMPLETE</span><div class="in2"><span>1,704 delivered</span><span>33 replies · 7 OPPT</span></div><div class="bar2"><i style="width:95%"></i></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ START ═══ -->
+      <section class="view" id="v-start">
+        <p class="kicker">START — daily preflight</p>
+        <h1 class="pgt serif">One click proves the machine is <em>right.</em></h1>
+        <p class="sub">Read-only checks across the whole engine, then the verdict — and the boundary, drawn. This page can never send anything.</p>
+        <button class="startbtn" id="btnStart">▶&nbsp; START</button>
+        <div class="checks" id="ckList">
+          <div class="ck"><span class="dot2"></span><div><div class="ct">Database &amp; board reachable</div><div class="cd">engine answered, tenant-scoped to your book only</div></div></div>
+          <div class="ck"><span class="dot2"></span><div><div class="ct">Current-month board (monthly roll)</div><div class="cd">63 opportunities · 41 inbound this month — prior months behind the Aged tab, nothing deleted</div></div></div>
+          <div class="ck"><span class="dot2"></span><div><div class="ct">Held blocks — inert, cannot send</div><div class="cd">3 held blocks · 2,902 leads staged, drafts attached, waiting on your click</div></div></div>
+          <div class="ck"><span class="dot2"></span><div><div class="ct">Execution-ready inventory at the line</div><div class="cd">polished, skip-traced, DNC-checked — nothing moves on its own</div></div></div>
+          <div class="ck"><span class="dot2"></span><div><div class="ct">Send rail resolved — locked until approval</div><div class="cd">your number · your brand · off-rail sends rejected at launch</div></div></div>
+          <div class="ck"><span class="dot2"></span><div><div class="ct">Compliance gates on every carve &amp; launch</div><div class="cd">contactability + opt-out + suppression, enforced server-side, fail-closed</div></div></div>
+        </div>
+        <div class="bound" id="boundLine">
+          <div class="ln2"></div>
+          <div class="bx">The boundary — nothing crosses without your click</div>
+          <div class="ln3"></div>
+        </div>
+        <div class="verdict" id="verdict">✓ ALL CLEAR — the machine is how it's supposed to be. Work the board.</div>
+        <div class="below panel" id="below">
+          <div class="pt">Below the boundary<small>already crossed — ledger-backed</small></div>
+          <div style="display:flex;gap:22px;flex-wrap:wrap;font-size:12px">
+            <span><b class="tnum">1</b> block sending</span>
+            <span><b class="tnum">7,336</b> delivered</span>
+            <span><b class="tnum">154</b> replies</span>
+            <span><b class="tnum" style="color:var(--pos)">33</b> opportunities created</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ ENGINE ═══ -->
+      <section class="view" id="v-engine">
+        <p class="kicker">The Engine</p>
+        <h1 class="pgt serif">Hold the county free. Pay only for what <em>matters.</em></h1>
+        <p class="sub">Ten layers, one loop. Watching your whole territory costs nothing — you pay pennies only on the signals worth chasing, and the pipeline re-verifies itself every month.</p>
+        <div class="layers">
+          <div class="lay"><span class="ix">1</span><div><div class="ln">Sourcing</div><div class="ld">your whole territory's parcels, saved and tracked</div></div><span class="cost free">$0</span></div>
+          <div class="lay"><span class="ix">2</span><div><div class="ln">Detection</div><div class="ld">daily snapshot-diff — catches the change the day it happens</div></div><span class="cost free">$0</span></div>
+          <div class="lay"><span class="ix">3</span><div><div class="ln">Classify</div><div class="ld">pre-foreclosure · auction · estate · vacant · expired · tax — stacked = convergence</div></div><span class="cost free">$0</span></div>
+          <div class="lay"><span class="ix">4</span><div><div class="ln">Enrich</div><div class="ld">skip trace + ranked phones + DNC + propensity, one pull, all-in</div></div><span class="cost dime">pennies / signal</span></div>
+          <div class="lay"><span class="ix">5</span><div><div class="ln">Phone rank</div><div class="ld">primary mobile → next-best → backup — reachability confirmed, not guessed</div></div><span class="cost free">$0</span></div>
+          <div class="lay"><span class="ix">6</span><div><div class="ln">Score &amp; tag</div><div class="ld">motivation + fit + reachability — the hottest rise on their own</div></div><span class="cost free">$0</span></div>
+          <div class="lay"><span class="ix">7</span><div><div class="ln">Stage</div><div class="ld">carved into campaign blocks, draft attached, held at the line</div></div><span class="cost free">$0</span></div>
+          <div class="lay"><span class="ix">8</span><div><div class="ln">Execute</div><div class="ld">SMS · dialer · your CRM — fires only on your approval</div></div><span class="cost gated">YOUR CLICK</span></div>
+          <div class="lay"><span class="ix">9</span><div><div class="ln">Log everything</div><div class="ld">every send, reply, outcome — recorded before it happens</div></div><span class="cost free">$0</span></div>
+          <div class="lay"><span class="ix">10</span><div><div class="ln">Re-verify monthly</div><div class="ld">not sold · not listed — dead ones drop, the floor rises</div></div><span class="cost free">~$0</span></div>
+        </div>
+        <p style="font-size:12px;color:var(--muted);margin-top:14px;font-family:Georgia,serif;font-style:italic">
+          "Stop buying lists. Start working signals." — lists rot; this compounds. Your book is worth more at the end of every month.
+        </p>
+      </section>
+
+      <!-- ═══ WIZARD ═══ -->
+      <section class="view" id="v-wizard">
+        <p class="kicker">Built to Suit</p>
+        <h1 class="pgt serif">We interview you. Then the engine is <em>yours.</em></h1>
+        <p class="sub">Six questions build your Knowledge Graph and scope your buy box + territory. Then the first universe report gets pulled — before you spend a dollar.</p>
+        <div class="panel wiz">
+          <div class="q"><span class="qn">Q1</span><div><div class="qt">Who are you, and what's your deal?</div><div class="qa">→ investor · agent · loan officer · wholesaler · operator · developer</div></div></div>
+          <div class="q"><span class="qn">Q2</span><div><div class="qt">What's a deal <em>for you</em>?</div><div class="qa">→ buy box: property type · price band · equity floor · condition · occupancy</div></div></div>
+          <div class="q"><span class="qn">Q3</span><div><div class="qt">Where do you hunt?</div><div class="qa">→ territory: states → counties → ZIPs, drawn on the map</div></div></div>
+          <div class="q"><span class="qn">Q4</span><div><div class="qt">What makes an owner a "now"?</div><div class="qa">→ triggers: distress · estate · vacant · expired · refi · tax-delinquent</div></div></div>
+          <div class="q"><span class="qn">Q5</span><div><div class="qt">How do you work leads?</div><div class="qa">→ channels + capacity: SMS · dialer · direct mail · straight to your CRM</div></div></div>
+          <div class="q"><span class="qn">Q6</span><div><div class="qt">Whose name is on it?</div><div class="qa">→ brand · domain · logo — this whole portal wears your skin</div></div></div>
+        </div>
+        <div class="wout">→ Output: your <b>Knowledge Graph built</b> · <b>buy box + territory scoped</b> · portal branded · first <b>universe report pulled ($0)</b>. You're in real estate — now you're in RE-tech.</div>
+      </section>
+
+      <div class="foot">
+        <b>Staged demo.</b> Every name, number, and record on this page is fictional. The live portal runs on your own isolated database, your domain, your brand — with a real client login.<br/>
+        White-label Data Engine by <b>Nextier Technologies</b> · tb@outreachglobal.io
       </div>
     </div>
   </div>
-
-  <div class="sec">
-    <div class="kicker">Event Signal Feed — as it lands</div>
-    <div class="panel" style="padding:0;overflow-x:auto">
-      <table class="feed">
-        <thead><tr><th>Owner</th><th>Property</th><th>Signal</th><th>Filed</th><th>Lender</th><th>Equity</th></tr></thead>
-        <tbody>
-          <tr><td class="who">R. Delgado</td><td class="geo2">Bay Shore, NY · Suffolk</td><td><span class="sig pf">PRE-FORECLOSURE</span></td><td class="tnum">Jul 02</td><td class="geo2">Meridian Mortgage</td><td class="eq tnum">91%</td></tr>
-          <tr><td class="who">M. Okafor</td><td class="geo2">Hempstead, NY · Nassau</td><td><span class="sig est">ESTATE / INHERITED</span></td><td class="tnum">Jul 02</td><td class="geo2">—</td><td class="eq tnum">100%</td></tr>
-          <tr><td class="who">T. Caruso</td><td class="geo2">Jamaica, NY · Queens</td><td><span class="sig pf">LIS PENDENS</span></td><td class="tnum">Jul 01</td><td class="geo2">Harborline Servicing</td><td class="eq tnum">78%</td></tr>
-          <tr><td class="who">S. Villanueva</td><td class="geo2">Yonkers, NY · Westchester</td><td><span class="sig vac">VACANT</span></td><td class="tnum">Jun 30</td><td class="geo2">—</td><td class="eq tnum">64%</td></tr>
-          <tr><td class="who">D. Prescott</td><td class="geo2">Bellmore, NY · Nassau</td><td><span class="sig exp">MLS EXPIRED</span></td><td class="tnum">Jun 30</td><td class="geo2">Crestway Lending</td><td class="eq tnum">55%</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <div class="boundary">
-    <p><b>The boundary:</b> this portal is read-only by design. Your pipeline is detected, scored, and staged here — <b>nothing contacts anyone until you say go.</b> Execution runs on your rail, behind your approval, every time.</p>
-  </div>
-
-  <div class="foot">
-    <b>This is a staged demo.</b> All names, figures, and records on this page are fictional. The live portal runs on your own isolated database, your domain, your brand — with a real client login exactly like this one.<br/>
-    White-label Data Engine by <b>Nextier Technologies</b> · tb@outreachglobal.io
-    <div class="badge">Your brand here — built to suit</div>
-  </div>
-
 </div>
+
+<script>
+(function(){
+  "use strict";
+  /* ── nav ── */
+  var views = document.querySelectorAll(".view");
+  var navs = document.querySelectorAll(".nl");
+  navs.forEach(function(n){
+    n.addEventListener("click", function(){
+      navs.forEach(function(x){x.classList.remove("active")});
+      n.classList.add("active");
+      views.forEach(function(v){v.classList.remove("on")});
+      var t = document.getElementById("v-" + n.dataset.v);
+      if (t) t.classList.add("on");
+      if (n.dataset.v === "command") animateBars();
+    });
+  });
+
+  /* ── count-up tiles ── */
+  function countUp(el){
+    var target = parseInt(el.dataset.count, 10), dur = 1100, t0 = null;
+    function step(ts){
+      if (!t0) t0 = ts;
+      var p = Math.min((ts - t0) / dur, 1);
+      el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))).toLocaleString();
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  document.querySelectorAll("[data-count]").forEach(countUp);
+
+  /* ── bars ── */
+  function animateBars(){
+    document.querySelectorAll(".bcol i").forEach(function(b){
+      setTimeout(function(){ b.style.height = b.dataset.h; }, 150);
+    });
+  }
+  animateBars();
+
+  /* ── signal data (all fictional) ── */
+  var FIRST = ["R. Delgado","M. Okafor","T. Caruso","S. Villanueva","D. Prescott","J. Whitfield","A. Moreau","K. Ramnauth","L. Esposito","P. Duval","C. Grantham","N. Adeyemi","F. Marchetti","G. Sundaram","B. Kowalski","H. Beaumont","V. Castellano","W. Okonkwo","E. Lindqvist","Y. Almeida"];
+  var GEO = [["Bay Shore, NY","Suffolk"],["Hempstead, NY","Nassau"],["Jamaica, NY","Queens"],["Yonkers, NY","Westchester"],["Bellmore, NY","Nassau"],["Brentwood, NY","Suffolk"],["Flushing, NY","Queens"],["Freeport, NY","Nassau"],["Canarsie, NY","Kings"],["Mount Vernon, NY","Westchester"],["Islip, NY","Suffolk"],["Elmont, NY","Nassau"]];
+  var SIGS = [
+    {c:"pf", t:"PRE-FORECLOSURE"},{c:"lp", t:"LIS PENDENS"},{c:"est", t:"ESTATE / INHERITED"},
+    {c:"vac", t:"VACANT"},{c:"exp", t:"MLS EXPIRED"},{c:"tax", t:"TAX DELINQUENT"}
+  ];
+  var LENDERS = ["Meridian Mortgage","Harborline Servicing","Crestway Lending","Northgate Trust","Lakemont Capital","—","—"];
+  var seed = 7;
+  function rnd(){ seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+  function pick(a){ return a[Math.floor(rnd() * a.length)]; }
+  function mkRow(dayOffset){
+    var g = pick(GEO), s = pick(SIGS), lender = pick(LENDERS);
+    var d = new Date(2026, 6, Math.max(1, 5 - dayOffset));
+    var caseNo = s.c === "pf" || s.c === "lp" ? " · #" + Math.floor(600000 + rnd() * 99999) : "";
+    return {
+      who: pick(FIRST), city: g[0], county: g[1], sig: s,
+      filed: ["Jul","Jun"][d.getMonth() === 6 ? 0 : 1] + " " + ("0" + d.getDate()).slice(-2),
+      lender: lender + caseNo,
+      bal: lender === "—" ? "—" : "$" + Math.floor(40 + rnd() * 420) + "k",
+      eq: Math.floor(45 + rnd() * 55) + "%"
+    };
+  }
+  function rowHtml(r, cols){
+    var base = '<td class="who">' + r.who + '</td><td class="geo2">' + r.city + " · " + r.county +
+      '</td><td><span class="sig ' + r.sig.c + '">' + r.sig.t + '</span></td><td class="tnum">' + r.filed + "</td>";
+    if (cols === 7) base += '<td class="geo2">' + r.lender + '</td><td class="tnum">' + r.bal + "</td>";
+    else base += '<td class="geo2">' + r.lender.split(" ·")[0] + "</td>";
+    return base + '<td class="eq tnum">' + r.eq + "</td>";
+  }
+
+  var cmdFeed = document.getElementById("cmdFeed");
+  var bigFeed = document.getElementById("bigFeed");
+  var bigRows = [];
+  for (var i = 0; i < 6; i++) { var tr = document.createElement("tr"); tr.innerHTML = rowHtml(mkRow(i), 6); cmdFeed.appendChild(tr); }
+  for (var j = 0; j < 22; j++) {
+    var r2 = mkRow(j), tr2 = document.createElement("tr");
+    tr2.innerHTML = rowHtml(r2, 7); tr2.dataset.sig = r2.sig.c;
+    bigFeed.appendChild(tr2); bigRows.push(tr2);
+  }
+
+  /* ── live ticker: a new signal lands every ~7s ── */
+  var secs = 4, newCount = 0;
+  var lastEl = document.getElementById("lastEvent");
+  setInterval(function(){
+    secs++;
+    lastEl.textContent = "last signal " + secs + "s ago";
+  }, 1000);
+  setInterval(function(){
+    var r = mkRow(0);
+    var tr = document.createElement("tr");
+    tr.className = "new-row"; tr.innerHTML = rowHtml(r, 6);
+    cmdFeed.insertBefore(tr, cmdFeed.firstChild);
+    if (cmdFeed.children.length > 8) cmdFeed.removeChild(cmdFeed.lastChild);
+    var tb = document.createElement("tr");
+    tb.className = "new-row"; tb.innerHTML = rowHtml(r, 7); tb.dataset.sig = r.sig.c;
+    bigFeed.insertBefore(tb, bigFeed.firstChild); bigRows.unshift(tb);
+    secs = 0; newCount++;
+    document.getElementById("pill-new").textContent = "+" + newCount;
+    applyFilter();
+  }, 7000);
+
+  /* ── feed filters ── */
+  var curFilter = "all";
+  function applyFilter(){
+    bigRows.forEach(function(tr){
+      tr.style.display = (curFilter === "all" || tr.dataset.sig === curFilter) ? "" : "none";
+    });
+  }
+  document.querySelectorAll("#sigFilters .chip").forEach(function(ch){
+    ch.addEventListener("click", function(){
+      document.querySelectorAll("#sigFilters .chip").forEach(function(x){x.classList.remove("on")});
+      ch.classList.add("on"); curFilter = ch.dataset.f; applyFilter();
+    });
+  });
+
+  /* ── pipeline kanban (current vs aged) ── */
+  var BUCKETS = [
+    {k:"OPPT", b:"Opportunity · hand-raiser"},
+    {k:"15-Min Discovery", b:"Discovery call booked"},
+    {k:"APPT", b:"Appointment set"},
+    {k:"Post-Appt", b:"After the appointment"},
+    {k:"Follow-Up", b:"Re-engagement"},
+    {k:"Nurture", b:"Value-first · no ask"}
+  ];
+  var MSGS = ["“Yes, what are my options?”","“How fast could this move?”","“Call me after 5”","“What's it worth as-is?”","“We inherited it last year”","“Send me the details”"];
+  var CUR = {"OPPT": 7, "15-Min Discovery": 3, "APPT": 2, "Post-Appt": 1, "Follow-Up": 0, "Nurture": 0};
+  var AGED = {"OPPT": 27, "15-Min Discovery": 0, "APPT": 4, "Post-Appt": 2, "Follow-Up": 9, "Nurture": 14};
+  function renderKan(counts, aged){
+    var kan = document.getElementById("kanban");
+    kan.innerHTML = "";
+    BUCKETS.forEach(function(bk){
+      var n = counts[bk.k] || 0;
+      var col = document.createElement("div");
+      col.className = "kcol";
+      var cards = "";
+      for (var i = 0; i < Math.min(n, 5); i++) {
+        var g = pick(GEO);
+        cards += '<div class="kc ' + (i === 0 ? "hot" : i < 3 ? "warm" : "cool") + '"><div class="nm">' + pick(FIRST) +
+          '</div><div class="in">' + g[0] + " · " + g[1] + '</div><div class="msg">' + pick(MSGS) + "</div></div>";
+      }
+      if (n > 5) cards += '<div class="kempty">+ ' + (n - 5) + " more…</div>";
+      if (n === 0) cards = '<div class="kempty">' + (aged ? "empty" : "0 — clean month") + "</div>";
+      col.innerHTML = '<div class="kh"><b>' + bk.k + '</b><span class="cnt' + (n === 0 ? " zero" : "") + '">' + n +
+        '</span></div><div class="kb">' + bk.b + '</div><div class="kcards">' + cards + "</div>";
+      kan.appendChild(col);
+    });
+  }
+  renderKan(CUR, false);
+  document.getElementById("tabCur").addEventListener("click", function(){
+    this.classList.add("on"); document.getElementById("tabAged").classList.remove("on"); renderKan(CUR, false);
+  });
+  document.getElementById("tabAged").addEventListener("click", function(){
+    this.classList.add("on"); document.getElementById("tabCur").classList.remove("on"); renderKan(AGED, true);
+  });
+
+  /* ── segmented lead pools ── */
+  var POOLS = [
+    {c:"pf",  n:"Pre-Foreclosure",       cnt:3840, reach:82, blurb:"NOD / lis pendens filed"},
+    {c:"est", n:"Estate / Inherited",    cnt:1970, reach:74, blurb:"deceased owner · probate transfer"},
+    {c:"eq",  n:"High-Equity Absentee",  cnt:5210, reach:88, blurb:"out-of-area · 60%+ equity"},
+    {c:"vac", n:"Vacant",                cnt:2430, reach:69, blurb:"occupancy separation"},
+    {c:"exp", n:"MLS Expired / Cancelled",cnt:1620, reach:91, blurb:"tried to sell, didn't"},
+    {c:"tax", n:"Tax Delinquent",        cnt:1180, reach:71, blurb:"carrying-cost pressure"}
+  ];
+  var pg = document.getElementById("poolGrid");
+  POOLS.forEach(function(p){
+    var reachN = Math.round(p.cnt * p.reach / 100);
+    var el = document.createElement("div");
+    el.className = "pool " + p.c;
+    el.innerHTML =
+      '<div class="ph"><span class="pn">' + p.n + '</span><span class="pc tnum">' + p.cnt.toLocaleString() + '</span></div>' +
+      '<div class="pd">' + p.blurb + '</div>' +
+      '<div class="rmeter"><i style="width:' + p.reach + '%"></i></div>' +
+      '<div class="pmeta"><span><b>' + reachN.toLocaleString() + '</b> reachable</span><span>' + p.reach + '% traced</span></div>' +
+      '<button class="carve">Carve → held block</button>';
+    var btn = el.querySelector(".carve");
+    btn.addEventListener("click", function(){
+      if (btn.classList.contains("done")) return;
+      btn.classList.add("done");
+      btn.textContent = "✓ Held block created (" + reachN.toLocaleString() + ") — approve in Blocks";
+    });
+    pg.appendChild(el);
+  });
+
+  /* ── START sequence ── */
+  var started = false;
+  document.getElementById("btnStart").addEventListener("click", function(){
+    if (started) return; started = true;
+    var btn = this; btn.disabled = true; btn.textContent = "RUNNING CHECKS…";
+    var cks = document.querySelectorAll("#ckList .ck");
+    cks.forEach(function(ck, i){
+      setTimeout(function(){ ck.classList.add("show"); }, i * 450);
+      setTimeout(function(){ ck.classList.add("pass"); }, i * 450 + 350);
+    });
+    var total = cks.length * 450 + 500;
+    setTimeout(function(){ document.getElementById("boundLine").classList.add("show"); }, total);
+    setTimeout(function(){ document.getElementById("verdict").classList.add("show"); }, total + 400);
+    setTimeout(function(){
+      document.getElementById("below").classList.add("show");
+      btn.textContent = "✓ ALL CLEAR";
+    }, total + 800);
+  });
+})();
+</script>
 </body></html>
